@@ -1,0 +1,31 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+
+<a href="{% url 'CreaCurso' %}">Publicar auto</a>
+<ul>
+  
+    {% for auto in autos %}
+      <li>
+        <a href="{% url 'DetalleCurso' curso.id %}">
+          {{curso}}
+        </a>
+      </li>
+      <div style="display: flex; column-gap: 5px;">
+        <button>
+          <a href="{% url 'ActualizaCurso' curso.id %}"> Actualizar </a>
+        </button>
+        <button>
+          <a href="{% url 'EliminaCurso' curso.id %}"> Eliminar </a>
+        </button>
+      </div>
+    {% endfor %}
+  
+  </ul>
+  
+ 
+
+
+
+{% endblock contenidoCambiable%}

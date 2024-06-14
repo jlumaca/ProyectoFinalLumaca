@@ -1,0 +1,24 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+
+<form action="{% url 'Login' %}" method="post">{% csrf_token %}
+
+    {{miFormulario.as_p}}
+  
+    <button type="submit"> Iniciar Sesión </button>
+  
+</form>
+
+{% if error_message %}
+<p>{{error_message}}</p>
+{% else %}
+<p>{{message}}</p>
+{% endif %}
+  
+ 
+
+
+
+{% endblock contenidoCambiable%}
