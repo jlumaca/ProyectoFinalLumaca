@@ -5,4 +5,7 @@ from App import views
 
 urlpatterns = [
     path('', views.inicio,name="Inicio"),#
+   # path('inicio', views.autos,name="Header"),
+    path('autos-lista', views.autos,name="Autos"),
+    path('login', views.vista_login,name="Login"),
 ]
