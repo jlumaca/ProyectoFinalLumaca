@@ -32,10 +32,21 @@
                         <li class="nav-item"><a class="nav-link" href="#">Acuaticos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Otros</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Conoceme</a></li>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Registrarme </a></li>
-                            <li><a href="{% url 'Login' %}"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
-                        </ul>
+                        {% if request.user.is_authenticated %}
+                        <form method="post" action="{% url 'Logout' %}"> {% csrf_token %}
+                            <li class="nav-item"><button><span class="glyphicon glyphicon-log-in"></span> Cerrar sesion </button></li>
+                        </form>
+                        <li class="nav-item"><p style="color: white;">Usuario: {{request.user.username}}</p></li>
+                        {% else %}
+                        
+                        <form method="" action="{% url 'Login' %}"> {% csrf_token %}
+                            <li class="nav-item"><button><span class="glyphicon glyphicon-log-in"></span> Iniciar sesion </button></li>
+                        </form>
+                        
+                        
+                        {% endif %}
+                        
+                        
                     </ul>
                 </div>
             </div>

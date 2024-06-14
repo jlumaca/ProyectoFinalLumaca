@@ -12,10 +12,12 @@
 </form>
 
 {% if error_message %}
-<p>{{error_message}}</p>
+<p style="color: red;">{{ error_message }}</p>
 {% else %}
 <p>{{message}}</p>
 {% endif %}
+
+<p>Si no tienes cuenta puedes registrarte <a href="{% url 'Registro' %}">aquí</a></p>
   
  
 

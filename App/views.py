@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.contrib.auth import authenticate, login, logout
+from App.forms import UserRegisterForm
 
 # Create your views here.
 
@@ -26,23 +27,44 @@ def vista_login(req):
       data = miFormulario.cleaned_data
 
       usuario = data["username"]
-      psw = data["password"]
+      password = data["password"]
 
-      user = authenticate(username=usuario, password=psw)
+      user = authenticate(username=usuario, password=password)
 
       if user:
         login(req, user)
-        return render(req, "sesiones/login.html", {"message": f"Bienvenido {usuario}"})
+        return render(req, "padre.html", {})
       
       else:
-        return render(req, "sesiones/login.html", {"error_message": "Datos erroneos"})
+        return render(req, "sesiones/login.html", {"error_message": "Nombre de usuario o contraseña incorrectos. Por favor, inténtalo de nuevo."})
     
     else:
-
-      return render(req, "sesiones/login.html", {"error_message": "Datos inválidos"})
+      print(miFormulario.errors)
+      return render(req, "sesiones/login.html", {"error_message": "Datos inválidos. Por favor, revisa los campos e inténtalo de nuevo."})
   
   else:
 
     miFormulario = AuthenticationForm()
 
     return render(req, "sesiones/login.html", {"miFormulario": miFormulario})
+
+def cerrarsesion(req):
+    pass
+
+def register(req):
+  if req.method == 'POST':
+
+            #form = UserCreationForm(request.POST)
+            form = UserRegisterForm(req.POST)
+            if form.is_valid():
+
+                  username = form.cleaned_data['username']
+                  form.save()
+                  return render(req,"sesiones/login.html" ,  {"message":"Usuario Creado :)"})
+
+  else:
+            #form = UserCreationForm()       
+            form = UserRegisterForm()  
+
+  return render(req,"sesiones/registrarme.html" ,  {"form":form})   
+
