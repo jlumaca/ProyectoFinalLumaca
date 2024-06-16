@@ -1,8 +1,14 @@
+from django.views.generic import TemplateView, ListView, DetailView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView 
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.contrib.auth import authenticate, login, logout
-from App.forms import UserRegisterForm
-
+from App.forms import UserRegisterForm,PublicarVehiculo
+from .models import Vehiculo, Chat
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from datetime import datetime
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def inicio(req):
@@ -13,7 +19,62 @@ def header(req):
 
 
 def autos(req):
-    return render(req,"autos/autos.html",{})
+    autos = Vehiculo.objects.filter(tipo__icontains="auto")
+    return render(req,"autos/autos.html",{"autos":autos})
+
+@login_required
+def autoCreate(req):
+  if req.method == 'POST':
+
+    miFormulario = PublicarVehiculo(req.POST,req.FILES)
+
+    if miFormulario.is_valid():
+
+      informacion = miFormulario.cleaned_data
+      fecha_actual = datetime.now().strftime('%Y-%m-%d')
+      #imagen_auto = Vehiculo(imagen=informacion["imagen"])
+      nuevo_auto = Vehiculo(titulo = informacion['titulo'],
+                            tipo = "auto",
+                            marca = informacion['marca'],
+                            modelo = informacion['modelo'],
+                            anioFabricacion = informacion['yearFabricacion'],
+                            precio = informacion['precio'],
+                            descripcion = informacion['descripcion'],
+                            fechaPublicacion = fecha_actual,
+                            telefonoVendedor = informacion['telefono'],
+                            emailVendedor = informacion['email'],
+                            imagen = informacion['imagen'],
+                            vendedor_id = req.user.id
+                            )
+      nuevo_auto.save()
+
+      return render(req, "autos/autos_create.html", {"message": "Estudiante ingresado con éxito"})
+    
+    else:
+
+      return render(req, "autos/autos_create.html", {"error_message": "Datos inválidos"})
+  
+  else:
+
+    miFormulario = PublicarVehiculo()
+
+    return render(req, "autos/autos_create.html", {"miFormulario": miFormulario})
+  
+@login_required
+def autoDelete(req,id_auto):
+    if req.method == 'POST':
+
+      auto = Vehiculo.objects.get(id=id_auto)
+      auto.delete()
+
+      #autos = Vehiculo.objects.filter(tipo__icontains="auto")
+
+      return render(req, "autos/autos_delete.html", {"message":"Auto borrado con éxito"})
+    
+    else:
+       
+       return render(req, "autos/autos_delete.html", {})
+
 
 
 def vista_login(req):
@@ -66,5 +127,31 @@ def register(req):
             #form = UserCreationForm()       
             form = UserRegisterForm()  
 
-  return render(req,"sesiones/registrarme.html" ,  {"form":form})   
+  return render(req,"sesiones/registrarme.html" ,  {"form":form})  
+
+
+
+#class ListaAutos(LoginRequiredMixin, ListView):
+#    context_object_name = 'autos'
+#    queryset = Vehiculo.objects.filter(tipo__startswith='auto')
+#    template_name = 'autos/autos.html'
+    #login_url = '/login/'
+
+#class GuitarraDetalle(LoginRequiredMixin, DetailView):
+#    model = Vehiculo
+#    context_object_name = 'guitarra'
+#    template_name = 'Base/guitarraDetalle.html'
+
+#class GuitarraUpdate(LoginRequiredMixin, UpdateView):
+#    model = Vehiculo
+#    form_class = ActualizacionInstrumento
+#    success_url = reverse_lazy('guitarras')
+#    context_object_name = 'guitarra'
+#    template_name = 'Base/guitarraEdicion.html'
+
+#class GuitarraDelete(LoginRequiredMixin, DeleteView):
+#    model = Vehiculo
+#    success_url = reverse_lazy('guitarras')
+#    context_object_name = 'guitarra'
+#    template_name = 'Base/guitarraBorrado.html'
 

@@ -14,3 +14,15 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ["username","email","password1","password2"]
         help_texts = {k:"" for k in fields}
+
+class PublicarVehiculo(forms.Form):
+    titulo = forms.CharField(label="Titulo")
+    
+    marca = forms.CharField(label="Marca")
+    modelo = forms.CharField(label="modelo")
+    yearFabricacion = forms.IntegerField(label="Año de fabricación")
+    precio = forms.IntegerField(label="Precio (en US$)")
+    descripcion = forms.CharField(widget=forms.Textarea, label="Descripción")
+    telefono = forms.CharField(label="Telefono de Contacto")
+    email = forms.EmailField(label="Email de Contacto")
+    imagen = forms.ImageField(label="Imagen",required=False)

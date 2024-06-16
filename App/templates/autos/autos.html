@@ -2,23 +2,32 @@
 {% load static %}
 
 {% block contenidoCambiable %}
-
-<a href="{% url 'CreaCurso' %}">Publicar auto</a>
+{% if request.user.is_authenticated %}
+<form action="{% url 'AutoCreate' %}" method="">{% csrf_token %}
+  <input type="submit" value="Publicar">
+</form>
+{% endif %}
 <ul>
   
     {% for auto in autos %}
+    <div style="display: flex; column-gap: 5px;">
       <li>
-        <a href="{% url 'DetalleCurso' curso.id %}">
-          {{curso}}
-        </a>
+        {% if auto.imagen %}
+            <img src="{{auto.imagen.url}}" alt="avatar" width="100px">
+            {% endif %}
+    
+          {{auto.titulo}}
+        
+        <a href=""> Detalles </a>
+        {% if user.id == auto.vendedor.id %}
+          <a href=""> Actualizar </a>
+        
+          <a href="{% url 'AutoDelete' auto.id %}"> Eliminar </a>
+        {% endif %}
+        
       </li>
-      <div style="display: flex; column-gap: 5px;">
-        <button>
-          <a href="{% url 'ActualizaCurso' curso.id %}"> Actualizar </a>
-        </button>
-        <button>
-          <a href="{% url 'EliminaCurso' curso.id %}"> Eliminar </a>
-        </button>
+        
+        
       </div>
     {% endfor %}
   

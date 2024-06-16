@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from App import views
+#from .views import ListaAutos
 from django.contrib.auth.views import LogoutView
 #from proyecto_django_lumaca.views import prueba
 
@@ -11,5 +12,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(template_name="padre.html"),name="Logout"),
     path('registro-user/', views.register,name="Registro"),
     path('autos-lista', views.autos,name="Autos"),
+    path('autos-create', views.autoCreate,name="AutoCreate"),
+    path('autos-delete/<id_auto>/', views.autoDelete,name="AutoDelete"),
 
 ]
