@@ -18,7 +18,7 @@ class Vehiculo(models.Model):
     titulo = models.CharField(max_length=200)
     tipo = models.CharField(max_length=15, choices=vehiculoSeleccion, default='autos')
     marca = models.CharField(max_length=40)
-    marca = models.CharField(max_length=40)
+    
     modelo = models.CharField(max_length=40)
     anioFabricacion = models.IntegerField() 
     precio = models.DecimalField(max_digits=10, decimal_places=2)
@@ -26,8 +26,8 @@ class Vehiculo(models.Model):
     fechaPublicacion = models.DateTimeField(auto_now_add=True)
     telefonoVendedor = models.CharField(max_length=20)
     emailVendedor = models.EmailField()
-    imagen = models.ImageField(null=True, blank=True, upload_to="imagenes/")
-
+    imagen = models.ImageField(null=True, blank=True, upload_to="media/")
+    #ACTUALIZAR NUEVA RUTA STATIC/IMAGENES/ (ANTES IMAGENES/), PUEDE GENERAR ERROR
     class Meta:
         ordering = ['vendedor', '-fechaPublicacion']
 
