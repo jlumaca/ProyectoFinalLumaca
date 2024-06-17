@@ -9,6 +9,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
 # Create your views here.
 
 def inicio(req):
@@ -62,18 +64,19 @@ def autoCreate(req):
   
 @login_required
 def autoDelete(req,id_auto):
+    #auto = get_object_or_404(Vehiculo, id=id_auto)
     if req.method == 'POST':
 
       auto = Vehiculo.objects.get(id=id_auto)
       auto.delete()
-
-      #autos = Vehiculo.objects.filter(tipo__icontains="auto")
-
-      return render(req, "autos/autos_delete.html", {"message":"Auto borrado con éxito"})
-    
+      return render(req, "autos/autos_delete.html", {"message":"Auto borrado con éxito","id_auto":0})
+      #return HttpResponse(f"<p>{id_auto}</p>")
     else:
-       
-       return render(req, "autos/autos_delete.html", {})
+       #print(f"Id auto es: {id_auto}")
+       return render(req, "autos/autos_delete.html", {"id_auto":id_auto})
+       #return HttpResponse(f"<p>{id_auto}</p>")
+def autoDeleteForm(req,id_auto):
+       return render(req, "autos/autos_delete.html", {"id_auto":id_auto})
 
 
 

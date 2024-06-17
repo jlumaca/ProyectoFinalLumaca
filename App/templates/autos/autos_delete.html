@@ -3,7 +3,7 @@
 
 {% block contenidoCambiable %}
 
-<form action="{% url 'AutoDelete' auto.id %}" method="post">{% csrf_token %}
+<form action="{% url 'AutoDelete' id_auto %}" method="POST">{% csrf_token %}
 
     <p>¿Está seguro que desea borrar el vehiculo?</p>
   
@@ -13,11 +13,11 @@
   
 </form>
 
-{% if error_message %}
-<p style="color: red;">{{ error_message }}</p>
-{% else %}
+{% if message %}
 <p>{{message}}</p>
 <p>Para volver al menú de autos has click <a href="{% url 'Autos' %}">aquí</a></p>
+{% else %}
+<p style="color: red;">{{ error_message }}</p>
 {% endif %}
 
 {% endblock contenidoCambiable%}
