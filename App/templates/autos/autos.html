@@ -3,6 +3,7 @@
 
 {% block contenidoCambiable %}
 {% if request.user.is_authenticated %}
+<br>
 <form action="{% url 'AutoCreate' %}" method="">{% csrf_token %}
   <input type="submit" value="Publicar">
 </form>
@@ -10,17 +11,18 @@
 <ul>
   
     {% for auto in autos %}
+    <br>
     <div style="display: flex; column-gap: 5px;">
       <li>
         {% if auto.imagen %}
             <img src="{{auto.imagen.url}}" alt="avatar" width="100px">
-            {% endif %}
+        {% endif %}
     
           {{auto.titulo}}
         
-        <a href=""> Detalles </a>
+        <a href="{% url 'AutoDetail' auto.id %}"> Detalles </a>
         {% if user.id == auto.vendedor.id %}
-          <a href=""> Actualizar </a>
+          <a href="{% url 'AutoUpdate' auto.id %}"> Actualizar </a>
         
           <a href="{% url 'AutoDelete' auto.id %}"> Eliminar </a>
         {% endif %}
@@ -29,7 +31,9 @@
         
         
       </div>
+      
     {% endfor %}
+    
   
   </ul>
   

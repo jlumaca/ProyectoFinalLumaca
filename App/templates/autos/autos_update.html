@@ -1,0 +1,26 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+
+
+<form action="{% url 'AutoUpdate' id_auto %}" enctype="multipart/form-data" method="post">{% csrf_token %}
+
+    {{form.as_p}}
+  
+    <button type="submit"> Actualizar </button>
+  
+  </form>
+
+  {% if message %}
+  <p>{{message}}</p>
+  <p>Para volver al menú de autos has click <a href="{% url 'Autos' %}">aquí</a></p>
+  {% else %}
+  <p style="color: red;">{{ error_message }}</p>
+  {% endif %}
+  
+ 
+
+
+
+{% endblock contenidoCambiable%}

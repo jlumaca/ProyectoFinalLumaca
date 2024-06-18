@@ -10831,3 +10831,7 @@ footer{
     display: none !important;
   }
 }
+
+.detailAuto{
+  color: blue;
+}

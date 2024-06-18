@@ -1,0 +1,20 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+<br>
+{% if imagenAuto %}
+    <img src="{{imagenAuto}}" alt="">
+{% endif %}
+<p><span class="detailAuto">TITULO:</span> {{ titulo }}</p>
+<p><span class="detailAuto">MARCA:</span> {{ marca }}</p>
+<p><span class="detailAuto">MODELO:</span> {{ modelo }}</p>
+<p><span class="detailAuto">AÑO:</span> {{ año }}</p>
+<p><span class="detailAuto">PRECIO (US$):</span> {{ precio }}</p>
+<p><span class="detailAuto">DESCRIPCION:</span> {{ descripcion }}</p>
+<p><span class="detailAuto">TELEFONO VENDEDOR:</span> {{ telefono }}</p>
+<p><span class="detailAuto">EMAIL VENDEDOR:</span> {{ email }}</p>
+
+<p>Para volver al menú de autos has click <a href="{% url 'Autos' %}">aquí</a></p>
+
+{% endblock contenidoCambiable%}

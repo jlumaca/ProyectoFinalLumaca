@@ -11,9 +11,12 @@ urlpatterns = [
     path('login/', views.vista_login,name="Login"),
     path('logout/', LogoutView.as_view(template_name="padre.html"),name="Logout"),
     path('registro-user/', views.register,name="Registro"),
+
     path('autos-lista', views.autos,name="Autos"),
     path('autos-create', views.autoCreate,name="AutoCreate"),
     path('autos-delete/<int:id_auto>', views.autoDelete,name="AutoDelete"),
+    path('autos-update/<int:id_auto>', views.autoUpdate,name="AutoUpdate"),
+    path('autos-detalle/<int:id_auto>', views.autoDetail,name="AutoDetail"),
     #path('autos-deleteForm/<id_auto>', views.autoDeleteForm,name="AutoDeleteForm"),
 
 ]
