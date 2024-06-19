@@ -19,6 +19,9 @@ def inicio(req):
 def header(req):
     return render(req,"header.html",{})
 
+def about(req):
+    return render(req,"about.html",{})
+
 
 def vehiculos(req,vehiculo):
     vehiculos = Vehiculo.objects.filter(tipo__icontains=vehiculo)

@@ -18,9 +18,12 @@
         <!-- Responsive navbar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="#!">BuyCars Uy</a>
+                <div style="padding-right: 10px; margin-left: -90px;">
+                <a class="navbar-brand" href="">BuyCars Uy</a>
+                </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div>
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='autos' %}">Autos</a></li>
@@ -32,16 +35,18 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='agricolas' %}">Agricolas</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='acuaticos' %}">Acuaticos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Otros</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Conoceme</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'About' %}">Conoceme</a></li>
                         {% if request.user.is_authenticated %}
+                        <li class="nav-item"><p style="color: white;">Usuario: <strong>{{request.user.username}}</strong></p></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Editar usuario</a></li>
                         <form method="post" action="{% url 'Logout' %}"> {% csrf_token %}
+                            
                             <li class="nav-item"><button><span class="glyphicon glyphicon-log-in"></span> Cerrar sesion </button></li>
                         </form>
-                        <li class="nav-item"><p style="color: white;">Usuario: {{request.user.username}}</p></li>
                         {% else %}
                         
                         <form method="" action="{% url 'Login' %}"> {% csrf_token %}
-                            <li class="nav-item"><button><span class="glyphicon glyphicon-log-in"></span> Iniciar sesion </button></li>
+                            <li class="nav-item"><button><span class="glyphicon glyphicon-log-in">Iniciar sesion</span>  </button></li>
                         </form>
                         
                         
@@ -49,22 +54,28 @@
                         
                         
                     </ul>
+                    </div>
                 </div>
             </div>
         </nav>
         <!-- Page header with logo and tagline-->
         
         <!-- Page content-->
+        <div class="ContenidoPrincipal">
         <div class="container">
             {% block contenidoCambiable %}
 
             {% endblock %}
 
         </div>
+        </div>
+        
         <!-- Footer-->
+        
         <footer class="py-5 bg-dark">
             <div class="container"><p class="m-0 text-center text-white">Todos los derechos reservados &copy; BuyCars Uy 2024</p></div>
         </footer>
+        
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->

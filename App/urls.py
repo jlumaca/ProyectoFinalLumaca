@@ -12,6 +12,8 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(template_name="padre.html"),name="Logout"),
     path('registro-user/', views.register,name="Registro"),
 
+    path('about/', views.about,name="About"),
+
     path('vehiculos-lista/<str:vehiculo>', views.vehiculos,name="Vehiculos"),
     path('vehiculo-create/<str:vehiculo>', views.vehiculoCreate,name="VehiculoCreate"),
     path('vehiculo-delete/<str:vehiculo>/<int:id_vehiculo>', views.vehiculoDelete,name="VehiculoDelete"),
