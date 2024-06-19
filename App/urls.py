@@ -12,11 +12,11 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(template_name="padre.html"),name="Logout"),
     path('registro-user/', views.register,name="Registro"),
 
-    path('autos-lista', views.autos,name="Autos"),
-    path('autos-create', views.autoCreate,name="AutoCreate"),
-    path('autos-delete/<int:id_auto>', views.autoDelete,name="AutoDelete"),
-    path('autos-update/<int:id_auto>', views.autoUpdate,name="AutoUpdate"),
-    path('autos-detalle/<int:id_auto>', views.autoDetail,name="AutoDetail"),
+    path('vehiculos-lista/<str:vehiculo>', views.vehiculos,name="Vehiculos"),
+    path('vehiculo-create/<str:vehiculo>', views.vehiculoCreate,name="VehiculoCreate"),
+    path('vehiculo-delete/<str:vehiculo>/<int:id_vehiculo>', views.vehiculoDelete,name="VehiculoDelete"),
+    path('vehiculo-update/<str:vehiculo>/<int:id_vehiculo>', views.vehiculoUpdate,name="VehiculoUpdate"),
+    path('vehiculo-detalles/<str:vehiculo>/<int:id_vehiculo>', views.vehiculoDetail,name="VehiculoDetail"),
     #path('autos-deleteForm/<id_auto>', views.autoDeleteForm,name="AutoDeleteForm"),
 
 ]

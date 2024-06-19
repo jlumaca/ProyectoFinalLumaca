@@ -20,12 +20,12 @@ def header(req):
     return render(req,"header.html",{})
 
 
-def autos(req):
-    autos = Vehiculo.objects.filter(tipo__icontains="auto")
-    return render(req,"autos/autos.html",{"autos":autos})
+def vehiculos(req,vehiculo):
+    vehiculos = Vehiculo.objects.filter(tipo__icontains=vehiculo)
+    return render(req,f"{vehiculo}/{vehiculo}.html",{"vehiculos":vehiculos})
 
 @login_required
-def autoCreate(req):
+def vehiculoCreate(req,vehiculo):
   if req.method == 'POST':
 
     miFormulario = PublicarVehiculo(req.POST,req.FILES)
@@ -35,8 +35,8 @@ def autoCreate(req):
       informacion = miFormulario.cleaned_data
       fecha_actual = datetime.now().strftime('%Y-%m-%d')
       #imagen_auto = Vehiculo(imagen=informacion["imagen"])
-      nuevo_auto = Vehiculo(titulo = informacion['titulo'],
-                            tipo = "auto",
+      nuevo_vehiculo = Vehiculo(titulo = informacion['titulo'],
+                            tipo = vehiculo,
                             marca = informacion['marca'],
                             modelo = informacion['modelo'],
                             anioFabricacion = informacion['yearFabricacion'],
@@ -48,36 +48,35 @@ def autoCreate(req):
                             imagen = informacion['imagen'],
                             vendedor_id = req.user.id
                             )
-      nuevo_auto.save()
+      nuevo_vehiculo.save()
 
-      return render(req, "autos/autos_create.html", {"message": "Auto publicado con éxito"})
+      return render(req, f"{vehiculo}/{vehiculo}_create.html", {"message": "Vehiculo publicado con éxito"})
     
     else:
 
-      return render(req, "autos/autos_create.html", {"error_message": "Datos inválidos"})
+      return render(req, f"{vehiculo}/{vehiculo}_create.html", {"error_message": "Datos inválidos"})
   
   else:
 
     miFormulario = PublicarVehiculo()
-
-    return render(req, "autos/autos_create.html", {"miFormulario": miFormulario})
+    return render(req, f"{vehiculo}/{vehiculo}_create.html", {"miFormulario": miFormulario})
   
 @login_required
-def autoDelete(req,id_auto):
+def vehiculoDelete(req,vehiculo,id_vehiculo):
     #auto = get_object_or_404(Vehiculo, id=id_auto)
     if req.method == 'POST':
 
-      auto = Vehiculo.objects.get(id=id_auto)
-      auto.delete()
-      return render(req, "autos/autos_delete.html", {"message":"Auto borrado con éxito","id_auto":0})
+      vehiculoDel = Vehiculo.objects.get(id=id_vehiculo)
+      vehiculoDel.delete()
+      return render(req, f"{vehiculo}/{vehiculo}_delete.html", {"message":"Auto borrado con éxito","id_vehiculo":0})
       #return HttpResponse(f"<p>{id_auto}</p>")
     else:
        #print(f"Id auto es: {id_auto}")
-       return render(req, "autos/autos_delete.html", {"id_auto":id_auto})
+       return render(req, f"{vehiculo}/{vehiculo}_delete.html", {"id_vehiculo":id_vehiculo})
        #return HttpResponse(f"<p>{id_auto}</p>")
 
 @login_required
-def autoUpdate(req,id_auto):
+def vehiculoUpdate(req,vehiculo,id_vehiculo):
       if req.method == 'POST':
 
         Formulario = PublicarVehiculo(req.POST,req.FILES)
@@ -85,60 +84,60 @@ def autoUpdate(req,id_auto):
         if Formulario.is_valid():
 
           data = Formulario.cleaned_data
-          vehiculo = Vehiculo.objects.get(id=id_auto)
+          vehiculoUpd = Vehiculo.objects.get(id=id_vehiculo)
 
-          vehiculo.titulo = data["titulo"]
-          vehiculo.marca = data["marca"]
-          vehiculo.modelo = data["modelo"]
-          vehiculo.anioFabricacion = data["yearFabricacion"]
-          vehiculo.precio = data["precio"]
-          vehiculo.descripcion = data["descripcion"]
-          vehiculo.telefonoVendedor = data["telefono"]
-          vehiculo.emailVendedor = data["email"]
+          vehiculoUpd.titulo = data["titulo"]
+          vehiculoUpd.marca = data["marca"]
+          vehiculoUpd.modelo = data["modelo"]
+          vehiculoUpd.anioFabricacion = data["yearFabricacion"]
+          vehiculoUpd.precio = data["precio"]
+          vehiculoUpd.descripcion = data["descripcion"]
+          vehiculoUpd.telefonoVendedor = data["telefono"]
+          vehiculoUpd.emailVendedor = data["email"]
          
           if 'imagen' in req.FILES:
-                vehiculo.imagen = data["imagen"]
+                vehiculoUpd.imagen = data["imagen"]
 
-          vehiculo.save()
+          vehiculoUpd.save()
 
-          return render(req, "autos/autos_update.html", {"message": "Auto actualizado con éxito","id_auto": id_auto})
+          return render(req, f"{vehiculo}/{vehiculo}_update.html", {"message": "Vehiculo actualizado con éxito","id_vehiculo": id_vehiculo})
         
         else:
 
-          return render(req, "autos/autos_update.html", {"message": "Datos inválidos","id_auto": id_auto})
+          return render(req, f"{vehiculo}/{vehiculo}_update.html", {"message": "Datos inválidos","id_vehiculo": id_vehiculo})
       
       else:
 
-        vehiculo = Vehiculo.objects.get(id=id_auto)
+        vehiculoUpd = Vehiculo.objects.get(id=id_vehiculo)
 
         Formulario = PublicarVehiculo(initial={
-          "titulo": vehiculo.titulo,
-          "marca": vehiculo.marca,
-          "modelo": vehiculo.modelo,
-          "yearFabricacion": vehiculo.anioFabricacion,
-          "precio": vehiculo.precio,
-          "descripcion": vehiculo.descripcion,
-          "telefono": vehiculo.telefonoVendedor,
-          "email": vehiculo.emailVendedor,
-          "imagen": vehiculo.imagen,
+          "titulo": vehiculoUpd.titulo,
+          "marca": vehiculoUpd.marca,
+          "modelo": vehiculoUpd.modelo,
+          "yearFabricacion": vehiculoUpd.anioFabricacion,
+          "precio": vehiculoUpd.precio,
+          "descripcion": vehiculoUpd.descripcion,
+          "telefono": vehiculoUpd.telefonoVendedor,
+          "email": vehiculoUpd.emailVendedor,
+          "imagen": vehiculoUpd.imagen,
         })
 
-        return render(req, "autos/autos_update.html", {"form": Formulario, "id_auto": id_auto})
+        return render(req, f"{vehiculo}/{vehiculo}_update.html", {"form": Formulario, "id_vehiculo": id_vehiculo})
 
-def autoDetail(req,id_auto):
-  auto = Vehiculo.objects.get(id=id_auto)
+def vehiculoDetail(req,vehiculo,id_vehiculo):
+  vehiculoDet = Vehiculo.objects.get(id=id_vehiculo)
   contexto = {
-     "titulo":auto.titulo,
-     "marca":auto.marca,
-     "modelo":auto.modelo,
-     "año":auto.anioFabricacion,
-     "precio":auto.precio,
-     "descripcion":auto.descripcion,
-     "telefono":auto.telefonoVendedor,
-     "email":auto.emailVendedor,
-     "imagenAuto":auto.imagen.url if auto.imagen else None
+     "titulo":vehiculoDet.titulo,
+     "marca":vehiculoDet.marca,
+     "modelo":vehiculoDet.modelo,
+     "año":vehiculoDet.anioFabricacion,
+     "precio":vehiculoDet.precio,
+     "descripcion":vehiculoDet.descripcion,
+     "telefono":vehiculoDet.telefonoVendedor,
+     "email":vehiculoDet.emailVendedor,
+     "imagenVehiculo":vehiculoDet.imagen.url if vehiculoDet.imagen else None
   }
-  return render(req, "autos/autos_details.html", contexto)
+  return render(req, f"{vehiculo}/{vehiculo}_details.html", contexto)
 
 
 def vista_login(req):
