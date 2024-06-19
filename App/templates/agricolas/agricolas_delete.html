@@ -1,0 +1,23 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+
+<form action="{% url 'VehiculoDelete' 'agricolas' id_vehiculo %}" method="POST">{% csrf_token %}
+
+    <p>¿Está seguro que desea borrar el vehiculo?</p>
+  
+    <button type="submit"> Eliminar </button>
+    
+    <button><a style="color: black; text-decoration: none;" href="{% url 'Vehiculos' vehiculo='agricolas' %}"> Cancelar </a> </button>
+  
+</form>
+
+{% if message %}
+<p>{{message}}</p>
+<p>Para volver al menú de agricolas has click <a href="{% url 'Vehiculos' vehiculo='agricolas' %}">aquí</a></p>
+{% else %}
+<p style="color: red;">{{ error_message }}</p>
+{% endif %}
+
+{% endblock contenidoCambiable%}

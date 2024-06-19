@@ -3,7 +3,7 @@
 
 {% block contenidoCambiable %}
 
-<form action="{% url 'VehiculoCreate' vehiculo='autos' %}" enctype="multipart/form-data" method="post">{% csrf_token %}
+<form action="{% url 'VehiculoCreate' vehiculo='acuaticos' %}" enctype="multipart/form-data" method="post">{% csrf_token %}
 
     {{miFormulario.as_p}}
   
@@ -15,7 +15,7 @@
 <p style="color: red;">{{ error_message }}</p>
 {% else %}
 <p>{{message}}</p>
-<p>Para volver al menú de autos has click <a href="{% url 'Vehiculos' vehiculo='autos' %}">aquí</a></p>
+<p>Para volver al menú de acuaticos has click <a href="{% url 'Vehiculos' vehiculo='acuaticos' %}">aquí</a></p>
 {% endif %}
 
   

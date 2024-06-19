@@ -4,17 +4,17 @@
 {% block contenidoCambiable %}
 
 
-<form action="{% url 'VehiculoUpdate' 'autos' id_vehiculo %}" enctype="multipart/form-data" method="post">{% csrf_token %}
+<form action="{% url 'VehiculoUpdate' 'motos' id_vehiculo %}" enctype="multipart/form-data" method="post">{% csrf_token %}
 
     {{form.as_p}}
   
     <button type="submit"> Actualizar </button>
   
-  </form>
+</form>
 
   {% if message %}
   <p>{{message}}</p>
-  <p>Para volver al menú de autos has click <a href="{% url 'Vehiculos' vehiculo='autos' %}">aquí</a></p>
+  <p>Para volver al menú de motos has click <a href="{% url 'Vehiculos' vehiculo='motos' %}">aquí</a></p>
   {% else %}
   <p style="color: red;">{{ error_message }}</p>
   {% endif %}

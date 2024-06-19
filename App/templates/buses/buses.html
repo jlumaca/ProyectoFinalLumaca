@@ -1,0 +1,48 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+{% if request.user.is_authenticated %}
+<br>
+<form action="{% url 'VehiculoCreate' vehiculo='buses' %}" method="">{% csrf_token %}
+  <input type="submit" value="Publicar">
+</form>
+{% endif %}
+{% if vehiculos %}
+<ul>
+  
+    {% for bus in vehiculos %}
+    <br>
+    <div style="display: flex; column-gap: 5px;">
+      <li>
+        {% if bus.imagen %}
+            <img src="{{bus.imagen.url}}" alt="avatar" width="100px">
+        {% endif %}
+    
+          {{bus.titulo}}
+        
+        <a href="{% url 'VehiculoDetail' 'buses' bus.id %}"> Detalles </a>
+        {% if user.id == bus.vendedor.id %}
+          <a href="{% url 'VehiculoUpdate' 'buses' bus.id %}"> Actualizar </a>
+        
+          <a href="{% url 'VehiculoDelete' 'buses' bus.id %}"> Eliminar </a>
+        {% endif %}
+        
+      </li>
+        
+        
+      </div>
+      
+    {% endfor %}
+    
+  
+  </ul>
+{% else %}
+<p>No hay buses aún</p>
+{% endif %}
+  
+ 
+
+
+
+{% endblock contenidoCambiable%}

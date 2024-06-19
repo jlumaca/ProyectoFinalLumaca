@@ -1,0 +1,44 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+{% if request.user.is_authenticated %}
+<br>
+<form action="{% url 'VehiculoCreate' vehiculo='acuaticos' %}" method="">{% csrf_token %}
+  <input type="submit" value="Publicar">
+</form>
+{% endif %}
+{% if vehiculos %}
+<ul>
+  
+    {% for acuatico in vehiculos %}
+    <br>
+    <div style="display: flex; column-gap: 5px;">
+      <li>
+        {% if acuatico.imagen %}
+            <img src="{{acuatico.imagen.url}}" alt="avatar" width="100px">
+        {% endif %}
+    
+          {{acuatico.titulo}}
+        
+        <a href="{% url 'VehiculoDetail' 'acuaticos' acuatico.id %}"> Detalles </a>
+        {% if user.id == acuatico.vendedor.id %}
+          <a href="{% url 'VehiculoUpdate' 'acuaticos' acuatico.id %}"> Actualizar </a>
+        
+          <a href="{% url 'VehiculoDelete' 'acuaticos' acuatico.id %}"> Eliminar </a>
+        {% endif %}
+        
+      </li>
+        
+        
+      </div>
+      
+    {% endfor %}
+    
+  
+  </ul>
+{% else %}
+<p>No hay vehiculos acuaticos aún</p>
+{% endif %}
+
+{% endblock contenidoCambiable%}

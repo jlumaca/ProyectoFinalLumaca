@@ -1,0 +1,48 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+{% if request.user.is_authenticated %}
+<br>
+<form action="{% url 'VehiculoCreate' vehiculo='camiones' %}" method="">{% csrf_token %}
+  <input type="submit" value="Publicar">
+</form>
+{% endif %}
+{% if vehiculos %}
+<ul>
+  
+    {% for camion in vehiculos %}
+    <br>
+    <div style="display: flex; column-gap: 5px;">
+      <li>
+        {% if camion.imagen %}
+            <img src="{{camion.imagen.url}}" alt="avatar" width="100px">
+        {% endif %}
+    
+          {{camion.titulo}}
+        
+        <a href="{% url 'VehiculoDetail' 'camiones' camion.id %}"> Detalles </a>
+        {% if user.id == camion.vendedor.id %}
+          <a href="{% url 'VehiculoUpdate' 'camiones' camion.id %}"> Actualizar </a>
+        
+          <a href="{% url 'VehiculoDelete' 'camiones' camion.id %}"> Eliminar </a>
+        {% endif %}
+        
+      </li>
+        
+        
+      </div>
+      
+    {% endfor %}
+    
+  
+  </ul>
+{% else %}
+<p>No hay camiones aún</p>
+{% endif %}
+  
+ 
+
+
+
+{% endblock contenidoCambiable%}

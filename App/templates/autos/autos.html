@@ -4,13 +4,14 @@
 {% block contenidoCambiable %}
 {% if request.user.is_authenticated %}
 <br>
-<form action="{% url 'AutoCreate' %}" method="">{% csrf_token %}
+<form action="{% url 'VehiculoCreate' vehiculo='autos' %}" method="">{% csrf_token %}
   <input type="submit" value="Publicar">
 </form>
 {% endif %}
+{% if vehiculos %}
 <ul>
   
-    {% for auto in autos %}
+    {% for auto in vehiculos %}
     <br>
     <div style="display: flex; column-gap: 5px;">
       <li>
@@ -20,11 +21,11 @@
     
           {{auto.titulo}}
         
-        <a href="{% url 'AutoDetail' auto.id %}"> Detalles </a>
+        <a href="{% url 'VehiculoDetail' 'autos' auto.id %}"> Detalles </a>
         {% if user.id == auto.vendedor.id %}
-          <a href="{% url 'AutoUpdate' auto.id %}"> Actualizar </a>
+          <a href="{% url 'VehiculoUpdate' 'autos' auto.id %}"> Actualizar </a>
         
-          <a href="{% url 'AutoDelete' auto.id %}"> Eliminar </a>
+          <a href="{% url 'VehiculoDelete' 'autos' auto.id %}"> Eliminar </a>
         {% endif %}
         
       </li>
@@ -36,6 +37,9 @@
     
   
   </ul>
+{% else %}
+<p>No hay autos aún</p>
+{% endif %}
   
  
 
