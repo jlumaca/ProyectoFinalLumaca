@@ -2,19 +2,29 @@
 {% load static %}
 
 {% block contenidoCambiable %}
-<br>
-{% if imagenVehiculo %}
-    <img src="{{imagenVehiculo}}" alt="">
-{% endif %}
-<p><span class="detailVehiculo">TITULO:</span> {{ titulo }}</p>
-<p><span class="detailVehiculo">MARCA:</span> {{ marca }}</p>
-<p><span class="detailVehiculo">MODELO:</span> {{ modelo }}</p>
-<p><span class="detailVehiculo">AÑO:</span> {{ año }}</p>
-<p><span class="detailVehiculo">PRECIO (US$):</span> {{ precio }}</p>
-<p><span class="detailVehiculo">DESCRIPCION:</span> {{ descripcion }}</p>
-<p><span class="detailVehiculo">TELEFONO VENDEDOR:</span> {{ telefono }}</p>
-<p><span class="detailVehiculo">EMAIL VENDEDOR:</span> {{ email }}</p>
-
-<p>Para volver al menú de autos has click <a href="{% url 'Vehiculos' vehiculo='autos' %}">aquí</a></p>
-
-{% endblock contenidoCambiable%}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            {% if imagenVehiculo %}
+                <img src="{{ imagenVehiculo }}" class="img-fluid" alt="Imagen del vehículo">
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h2>{{ titulo }}</h2>
+            <hr>
+            <p><strong>MARCA:</strong> {{ marca }}</p>
+            <p><strong>MODELO:</strong> {{ modelo }}</p>
+            <p><strong>AÑO:</strong> {{ año }}</p>
+            <p><strong>PRECIO (US$):</strong> {{ precio }}</p>
+            <hr>
+            <p><strong>DESCRIPCIÓN:</strong></p>
+            <p>{{ descripcion }}</p>
+            <hr>
+            <p><strong>TELÉFONO VENDEDOR:</strong> {{ telefono }}</p>
+            <p><strong>EMAIL VENDEDOR:</strong> {{ email }}</p>
+            <hr>
+            <p><a href="{% url 'Vehiculos' vehiculo='autos' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Volver al Menú de Autos</a></p>
+        </div>
+    </div>
+</div>
+{% endblock contenidoCambiable %}

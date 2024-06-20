@@ -13,19 +13,20 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'css/styles.css'%}" rel="stylesheet" />
         <link src="{% static 'js/scripts.js'%}">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     </head>
     <body>
         <!-- Responsive navbar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <div style="padding-right: 10px; margin-left: -90px;">
-                <a class="navbar-brand" href="">BuyCars Uy</a>
+                <a class="navbar-brand" href="{% url 'Inicio' %}">BuyCars Uy</a>
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div>
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'Inicio' %}">Inicio</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='autos' %}">Autos</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='motos' %}">Motos</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='camionetas' %}">Camionetas</a></li>
@@ -38,15 +39,23 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'About' %}">Conoceme</a></li>
                         {% if request.user.is_authenticated %}
                         <li class="nav-item"><p style="color: white;">Usuario: <strong>{{request.user.username}}</strong></p></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Editar usuario</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'Editar' %}">Editar usuario</a></li>
                         <form method="post" action="{% url 'Logout' %}"> {% csrf_token %}
                             
-                            <li class="nav-item"><button><span class="glyphicon glyphicon-log-in"></span> Cerrar sesion </button></li>
+                            <li class="nav-item">
+                                <button class="btn btn-outline-danger">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </button>
+                            </li>
                         </form>
                         {% else %}
                         
                         <form method="" action="{% url 'Login' %}"> {% csrf_token %}
-                            <li class="nav-item"><button><span class="glyphicon glyphicon-log-in">Iniciar sesion</span>  </button></li>
+                            <li class="nav-item">
+                                <button class="btn btn-outline-light">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </button>
+                            </li>
                         </form>
                         
                         

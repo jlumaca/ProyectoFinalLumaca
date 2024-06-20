@@ -2,47 +2,39 @@
 {% load static %}
 
 {% block contenidoCambiable %}
+{% if vehiculos %}
 {% if request.user.is_authenticated %}
 <br>
 <form action="{% url 'VehiculoCreate' vehiculo='autos' %}" method="">{% csrf_token %}
-  <input type="submit" value="Publicar">
+  <button type="submit" class="btn btn-primary">
+    <i class="fas fa-plus"></i> Publicar
+  </button>
 </form>
 {% endif %}
-{% if vehiculos %}
-<ul>
-  
-    {% for auto in vehiculos %}
-    <br>
-    <div style="display: flex; column-gap: 5px;">
-      <li>
-        {% if auto.imagen %}
-            <img src="{{auto.imagen.url}}" alt="avatar" width="100px">
-        {% endif %}
+<br>
+
+<ul class="list-unstyled">
+  {% for auto in vehiculos %}
+    <li class="mb-3">
+      {% if auto.imagen %}
+        <img src="{{ auto.imagen.url }}" alt="avatar" width="100px" style="margin-right: 10px;">
+      {% endif %}
     
-          {{auto.titulo}}
+      {{ auto.titulo }}
         
-        <a href="{% url 'VehiculoDetail' 'autos' auto.id %}"> Detalles </a>
-        {% if user.id == auto.vendedor.id %}
-          <a href="{% url 'VehiculoUpdate' 'autos' auto.id %}"> Actualizar </a>
-        
-          <a href="{% url 'VehiculoDelete' 'autos' auto.id %}"> Eliminar </a>
-        {% endif %}
-        
-      </li>
-        
-        
-      </div>
+      <a class="btn btn-info btn-circle fas fa-search" href="{% url 'VehiculoDetail' 'autos' auto.id %}"></a>
       
-    {% endfor %}
-    
-  
-  </ul>
+      {% if user.id == auto.vendedor.id %}
+        <a class="btn btn-warning btn-circle fas fa-pencil-alt" href="{% url 'VehiculoUpdate' 'autos' auto.id %}"></a>
+        <a class="btn btn-danger btn-circle fas fa-trash-alt" href="{% url 'VehiculoDelete' 'autos' auto.id %}"></a>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
 {% else %}
-<p>No hay autos aún</p>
+<div class="text-center">
+  <p>No hay autos disponibles.</p>
+  <a href="{% url 'VehiculoCreate' vehiculo='autos' %}" class="btn btn-primary">Publicar un nuevo vehículo</a>
+</div>
 {% endif %}
-  
- 
-
-
-
-{% endblock contenidoCambiable%}
+{% endblock contenidoCambiable %}

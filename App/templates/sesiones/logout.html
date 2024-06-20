@@ -1,0 +1,23 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h2>¡Has cerrado sesión exitosamente!</h2>
+            <p>Esperamos verte pronto de vuelta.</p>
+            <p>¿Quieres iniciar sesión nuevamente?</p>
+            <a href="{% url 'Login' %}" class="btn btn-primary">Iniciar sesión</a>
+            <p class="mt-3">También puedes visitar otras secciones de nuestro sitio y consultar los vehiculos en la barra superior:</p>
+            <ul class="list-unstyled">
+                <li><a href="{% url 'Inicio' %}">Inicio</a></li>
+                <li><a href="{% url 'About' %}">Sobre nosotros</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock contenidoCambiable %}
+

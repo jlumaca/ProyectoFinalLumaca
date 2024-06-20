@@ -9,8 +9,10 @@ urlpatterns = [
     path('', views.inicio,name="Inicio"),#
    # path('inicio', views.autos,name="Header"),
     path('login/', views.vista_login,name="Login"),
-    path('logout/', LogoutView.as_view(template_name="padre.html"),name="Logout"),
+    path('logout/', LogoutView.as_view(template_name="sesiones/logout.html"),name="Logout"),
     path('registro-user/', views.register,name="Registro"),
+    path('editar-user/', views.editUser,name="Editar"),
+    #path('editar-userpass/', views.editUserPass,name="EditarPass"),
 
     path('about/', views.about,name="About"),
 

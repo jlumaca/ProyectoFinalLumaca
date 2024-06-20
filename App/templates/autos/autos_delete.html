@@ -7,10 +7,12 @@
 
     <p>¿Está seguro que desea borrar el vehiculo?</p>
   
-    <button type="submit"> Eliminar </button>
-    
-    <button><a style="color: black; text-decoration: none;" href="{% url 'Vehiculos' vehiculo='autos' %}"> Cancelar </a> </button>
-  
+    <button type="submit" class="btn btn-danger">
+        <i class="fas fa-trash-alt"></i> Eliminar
+    </button>
+    <a href="{% url 'Vehiculos' vehiculo='autos' %}" class="btn btn-secondary">
+        <i class="fas fa-times"></i> Cancelar
+    </a>
 </form>
 
 {% if message %}

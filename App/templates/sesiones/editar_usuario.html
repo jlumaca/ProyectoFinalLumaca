@@ -1,0 +1,56 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">Editar datos de usuario</h4>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'Editar' %}" method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        {% for field in miFormulario %}
+                            {% if field.name != 'password' %}
+                                <div class="mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <div class="form-text">{{ field.help_text }}</div>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if error_message %}
+<div class="container mt-3">
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+</div>
+{% elif message %}
+<div class="container mt-3">
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+    <p class="text-center mt-3"><a href="{% url 'Inicio' %}" class="btn btn-secondary">Volver a Inicio</a></p>
+</div>
+{% endif %}
+
+{% endblock contenidoCambiable %}
+

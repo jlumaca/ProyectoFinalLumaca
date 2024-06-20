@@ -5,17 +5,20 @@
 
 <form action="{% url 'VehiculoCreate' vehiculo='autos' %}" enctype="multipart/form-data" method="post">{% csrf_token %}
 
-    {{miFormulario.as_p}}
-  
-    <button type="submit"> Guardar </button>
+    {{ miFormulario.as_p }}
+        <button type="submit" class="btn btn-primary mt-3">
+            <i class="fas fa-plus"></i> Publicar
+        </button>
+        <a href="{% url 'Vehiculos' vehiculo='autos' %}" class="btn btn-secondary mt-3">
+            <i class="fas fa-times"></i> Cancelar
+        </a>
   
 </form>
 
 {% if error_message %}
 <p style="color: red;">{{ error_message }}</p>
-{% else %}
+{% elif message %}
 <p>{{message}}</p>
-<p>Para volver al menú de autos has click <a href="{% url 'Vehiculos' vehiculo='autos' %}">aquí</a></p>
 {% endif %}
 
   

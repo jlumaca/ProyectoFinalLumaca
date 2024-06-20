@@ -3,7 +3,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormVi
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.contrib.auth import authenticate, login, logout
-from App.forms import UserRegisterForm,PublicarVehiculo
+from App.forms import UserRegisterForm,PublicarVehiculo,UserEditForm
 from .models import Vehiculo, Chat
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -14,10 +14,7 @@ from django.http import HttpResponse
 # Create your views here.
 
 def inicio(req):
-    return render(req,"padre.html",{})
-
-def header(req):
-    return render(req,"header.html",{})
+    return render(req,"inicio.html",{})
 
 def about(req):
     return render(req,"about.html",{})
@@ -160,7 +157,7 @@ def vista_login(req):
 
       if user:
         login(req, user)
-        return render(req, "padre.html", {})
+        return render(req, "inicio.html", {})
       
       else:
         return render(req, "sesiones/login.html", {"error_message": "Nombre de usuario o contraseña incorrectos. Por favor, inténtalo de nuevo."})
@@ -175,8 +172,6 @@ def vista_login(req):
 
     return render(req, "sesiones/login.html", {"miFormulario": miFormulario})
 
-def cerrarsesion(req):
-    pass
 
 def register(req):
   if req.method == 'POST':
@@ -195,29 +190,45 @@ def register(req):
 
   return render(req,"sesiones/registrarme.html" ,  {"form":form})  
 
+@login_required
+def editUser(req):
+
+  usuario = req.user
+
+  if req.method == 'POST':
+
+    miFormulario = UserEditForm(req.POST, instance=req.user)
+
+    if miFormulario.is_valid():
+
+      data = miFormulario.cleaned_data
+
+      usuario.username = data["username"]
+      usuario.email = data["email"]
+      #usuario.last_name = data["last_name"]
+      usuario.set_password(data["password1"])
+
+      pss1 = data["password1"]
+      pss2 = data["password2"]
+
+      if pss1 == pss2:
+        usuario.save()
+        return render(req, "sesiones/editar_usuario.html", {"message": "Datos actualizado con éxito"})
+      else:
+         miFormulario = UserEditForm(instance=req.user)
+         return render(req, "sesiones/editar_usuario.html", {"miFormulario": miFormulario,"error_message": "Las contraseñas deben coincidir"})
+    
+    else:
+
+      return render(req, "sesiones/editar_usuario.html", {"miFormulario": miFormulario})
+  
+  else:
+
+    miFormulario = UserEditForm(instance=req.user)
+
+    return render(req, "sesiones/editar_usuario.html", {"miFormulario": miFormulario})
 
 
-#class ListaAutos(LoginRequiredMixin, ListView):
-#    context_object_name = 'autos'
-#    queryset = Vehiculo.objects.filter(tipo__startswith='auto')
-#    template_name = 'autos/autos.html'
-    #login_url = '/login/'
-
-#class GuitarraDetalle(LoginRequiredMixin, DetailView):
-#    model = Vehiculo
-#    context_object_name = 'guitarra'
-#    template_name = 'Base/guitarraDetalle.html'
-
-#class GuitarraUpdate(LoginRequiredMixin, UpdateView):
-#    model = Vehiculo
-#    form_class = ActualizacionInstrumento
-#    success_url = reverse_lazy('guitarras')
-#    context_object_name = 'guitarra'
-#    template_name = 'Base/guitarraEdicion.html'
-
-#class GuitarraDelete(LoginRequiredMixin, DeleteView):
-#    model = Vehiculo
-#    success_url = reverse_lazy('guitarras')
-#    context_object_name = 'guitarra'
-#    template_name = 'Base/guitarraBorrado.html'
+# def editUserPass(req):
+#    return render(req, "sesiones/editar_pass.html", {"miFormulario": miFormulario})
 
