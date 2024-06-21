@@ -140,6 +140,12 @@ def vehiculoDetail(req,vehiculo,id_vehiculo):
   return render(req, f"{vehiculo}/{vehiculo}_details.html", contexto)
 
 
+def vehiculoSearch(req,vehiculo):
+  busqueda = req.GET.get('buscar')
+  resultados = Vehiculo.objects.filter(titulo__icontains=busqueda,tipo=vehiculo)
+  return render(req, f'{vehiculo}/{vehiculo}.html', {'vehiculos': resultados})
+
+
 def vista_login(req):
 
   if req.method == 'POST':
