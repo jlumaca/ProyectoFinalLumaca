@@ -2,43 +2,53 @@
 {% load static %}
 
 {% block contenidoCambiable %}
+<div class="container">
+{% if vehiculos %}
 {% if request.user.is_authenticated %}
 <br>
+<div class="d-flex justify-content-between align-items-center mb-3">
 <form action="{% url 'VehiculoCreate' vehiculo='acuaticos' %}" method="">{% csrf_token %}
-  <input type="submit" value="Publicar">
+  <button type="submit" class="btn btn-primary">
+    <i class="fas fa-plus"></i> Publicar
+  </button>
 </form>
 {% endif %}
-{% if vehiculos %}
-<ul>
-  
-    {% for acuatico in vehiculos %}
-    <br>
-    <div style="display: flex; column-gap: 5px;">
-      <li>
-        {% if acuatico.imagen %}
-            <img src="{{acuatico.imagen.url}}" alt="avatar" width="100px">
-        {% endif %}
-    
-          {{acuatico.titulo}}
-        
-        <a href="{% url 'VehiculoDetail' 'acuaticos' acuatico.id %}"> Detalles </a>
-        {% if user.id == acuatico.vendedor.id %}
-          <a href="{% url 'VehiculoUpdate' 'acuaticos' acuatico.id %}"> Actualizar </a>
-        
-          <a href="{% url 'VehiculoDelete' 'acuaticos' acuatico.id %}"> Eliminar </a>
-        {% endif %}
-        
-      </li>
-        
-        
-      </div>
-      
-    {% endfor %}
-    
-  
-  </ul>
-{% else %}
-<p>No hay vehiculos acuaticos aún</p>
-{% endif %}
+<form action="{% url 'VehiculoSearch' 'acuaticos' %}" method="get" class="d-flex align-items-center ms-3">{% csrf_token %}
 
-{% endblock contenidoCambiable%}
+  <input type="text" id="buscar" name="buscar" class="form-control me-2" placeholder="Buscar...">
+  <button type="submit" class="btn btn-primary">
+    <i class="fas fa-search"></i>
+  </button>
+</form>
+</div>
+<br>
+
+<ul class="list-unstyled">
+  {% for acuatico in vehiculos %}
+  <li class="mb-3">
+    <div class="d-flex align-items-center">
+      {% if acuatico.imagen %}
+        <img src="{{ acuatico.imagen.url }}" alt="avatar" width="100px" style="margin-right: 10px;">
+      {% endif %}
+      <div class="flex-grow-1">
+        <h5 class="mb-1">{{ acuatico.titulo }}</h5>
+        <div class="d-flex">
+          <a class="btn btn-info btn-circle fas fa-search me-2" href="{% url 'VehiculoDetail' 'acuaticos' acuatico.id %}"></a>
+          {% if user.id == acuatico.vendedor.id %}
+            <a class="btn btn-warning btn-circle fas fa-pencil-alt me-2" href="{% url 'VehiculoUpdate' 'acuaticos' acuatico.id %}"></a>
+            <a class="btn btn-danger btn-circle fas fa-trash-alt" href="{% url 'VehiculoDelete' 'acuaticos' acuatico.id %}"></a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="text-center">
+  <p>No hay acuaticos disponibles.</p>
+  <a href="{% url 'VehiculoCreate' vehiculo='acuaticos' %}" class="btn btn-primary">Publicar un nuevo vehículo</a>
+</div>
+</div>
+{% endif %}
+{% endblock contenidoCambiable %}

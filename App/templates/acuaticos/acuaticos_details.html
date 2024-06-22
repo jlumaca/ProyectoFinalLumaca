@@ -2,19 +2,69 @@
 {% load static %}
 
 {% block contenidoCambiable %}
-<br>
-{% if imagenVehiculo %}
-    <img src="{{imagenVehiculo}}" alt="">
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            {% if imagenVehiculo %}
+                <img src="{{ imagenVehiculo }}" class="img-fluid" alt="Imagen del vehículo">
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h2>{{ titulo }}</h2>
+            <hr>
+            <p><strong>MARCA:</strong> {{ marca }}</p>
+            <p><strong>MODELO:</strong> {{ modelo }}</p>
+            <p><strong>AÑO:</strong> {{ año }}</p>
+            <p><strong>KILOMETROS:</strong> {{ kilometros }}</p>
+            <p><strong>PRECIO (US$):</strong> {{ precio }}</p>
+            <hr>
+            <p><strong>DESCRIPCIÓN:</strong></p>
+            <p>{{ descripcion }}</p>
+            <hr>
+            <p><strong>TELÉFONO VENDEDOR:</strong> {{ telefono }}</p>
+            <p><strong>EMAIL VENDEDOR:</strong> {{ email }}</p>
+            <hr>
+            {% if request.user.is_superuser or request.user.is_staff %}
+            <p><a href="{% url 'PublicacionesAdmin' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Volver al Menú de acuaticos</a></p>
+            {% else %}
+            <p><a href="{% url 'Vehiculos' vehiculo='acuaticos' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Volver al Menú de acuaticos</a></p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% if not request.user.is_superuser or not request.user.is_staff %}
+<h5>Consultas</h5>
+{% if user.id != id_vendedor %}
+<form action="{% url 'Consultar' 'acuaticos' id_vehiculo %}" method="">{% csrf_token %}
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Consultar
+    </button>
+</form>
 {% endif %}
-<p><span class="detailVehiculo">TITULO:</span> {{ titulo }}</p>
-<p><span class="detailVehiculo">MARCA:</span> {{ marca }}</p>
-<p><span class="detailVehiculo">MODELO:</span> {{ modelo }}</p>
-<p><span class="detailVehiculo">AÑO:</span> {{ año }}</p>
-<p><span class="detailVehiculo">PRECIO (US$):</span> {{ precio }}</p>
-<p><span class="detailVehiculo">DESCRIPCION:</span> {{ descripcion }}</p>
-<p><span class="detailVehiculo">TELEFONO VENDEDOR:</span> {{ telefono }}</p>
-<p><span class="detailVehiculo">EMAIL VENDEDOR:</span> {{ email }}</p>
 
-<p>Para volver al menú de acuaticos has click <a href="{% url 'Vehiculos' vehiculo='acuaticos' %}">aquí</a></p>
+<div class="consultas mt-4">
+    {% if consultas %}
+    {% for consulta in consultas %}
+    <div class="consulta mb-3 p-3 border rounded">
+        <p><strong>{{ consulta.nombreCompleto }}:</strong> {{ consulta.mensaje }}</p>
+        <div class="respuestas ml-4">
+            {% for respuesta in consulta.respuestas.all %}
+            <div class="respuesta bg-light p-2 my-2 rounded" style="text-align: right;">
+                <p><strong>Respuesta:</strong> {{ respuesta.mensaje }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% if user.id == id_vendedor %}
+        <a href="{% url 'Responder' consulta.id id_vehiculo %}" class="btn btn-link">Responder</a>
+        {% endif %}
+    </div>
+    {% endfor %}
 
-{% endblock contenidoCambiable%}
+    {% else %}
+
+        <h3>No hay consultas aún...</h3>
+
+    {% endif %}
+</div>
+{% endif %}
+{% endblock contenidoCambiable %}

@@ -2,47 +2,53 @@
 {% load static %}
 
 {% block contenidoCambiable %}
+<div class="container">
+{% if vehiculos %}
 {% if request.user.is_authenticated %}
 <br>
+<div class="d-flex justify-content-between align-items-center mb-3">
 <form action="{% url 'VehiculoCreate' vehiculo='camiones' %}" method="">{% csrf_token %}
-  <input type="submit" value="Publicar">
+  <button type="submit" class="btn btn-primary">
+    <i class="fas fa-plus"></i> Publicar
+  </button>
 </form>
 {% endif %}
-{% if vehiculos %}
-<ul>
-  
-    {% for camion in vehiculos %}
-    <br>
-    <div style="display: flex; column-gap: 5px;">
-      <li>
-        {% if camion.imagen %}
-            <img src="{{camion.imagen.url}}" alt="avatar" width="100px">
-        {% endif %}
-    
-          {{camion.titulo}}
-        
-        <a href="{% url 'VehiculoDetail' 'camiones' camion.id %}"> Detalles </a>
-        {% if user.id == camion.vendedor.id %}
-          <a href="{% url 'VehiculoUpdate' 'camiones' camion.id %}"> Actualizar </a>
-        
-          <a href="{% url 'VehiculoDelete' 'camiones' camion.id %}"> Eliminar </a>
-        {% endif %}
-        
-      </li>
-        
-        
+<form action="{% url 'VehiculoSearch' 'camiones' %}" method="get" class="d-flex align-items-center ms-3">{% csrf_token %}
+
+  <input type="text" id="buscar" name="buscar" class="form-control me-2" placeholder="Buscar...">
+  <button type="submit" class="btn btn-primary">
+    <i class="fas fa-search"></i>
+  </button>
+</form>
+</div>
+<br>
+
+<ul class="list-unstyled">
+  {% for camion in vehiculos %}
+  <li class="mb-3">
+    <div class="d-flex align-items-center">
+      {% if camion.imagen %}
+        <img src="{{ camion.imagen.url }}" alt="avatar" width="100px" style="margin-right: 10px;">
+      {% endif %}
+      <div class="flex-grow-1">
+        <h5 class="mb-1">{{ camion.titulo }}</h5>
+        <div class="d-flex">
+          <a class="btn btn-info btn-circle fas fa-search me-2" href="{% url 'VehiculoDetail' 'camiones' camion.id %}"></a>
+          {% if user.id == camion.vendedor.id %}
+            <a class="btn btn-warning btn-circle fas fa-pencil-alt me-2" href="{% url 'VehiculoUpdate' 'camiones' camion.id %}"></a>
+            <a class="btn btn-danger btn-circle fas fa-trash-alt" href="{% url 'VehiculoDelete' 'camiones' camion.id %}"></a>
+          {% endif %}
+        </div>
       </div>
-      
-    {% endfor %}
-    
-  
-  </ul>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
 {% else %}
-<p>No hay camiones aún</p>
+<div class="text-center">
+  <p>No hay camiones disponibles.</p>
+  <a href="{% url 'VehiculoCreate' vehiculo='camiones' %}" class="btn btn-primary">Publicar un nuevo vehículo</a>
+</div>
+</div>
 {% endif %}
-  
- 
-
-
-
-{% endblock contenidoCambiable%}
+{% endblock contenidoCambiable %}
