@@ -1,0 +1,26 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+
+<form action="" method="POST">{% csrf_token %}
+    {% if not message %}
+    <p>¿Está seguro que desea censurar el comentario?</p>
+    <button type="submit" class="btn btn-danger">
+        <i class="fas fa-trash-alt"></i> Censurar
+    </button>
+    <a href="{% url 'ConsultasAdmin' %}" class="btn btn-secondary">
+        <i class="fas fa-times"></i> Cancelar
+    </a>
+  
+    {% endif %}
+</form>
+
+{% if message %}
+<p>{{message}}</p>
+<p>Para volver has click <a href="{% url 'ConsultasAdmin' %}">aquí</a></p>
+{% else %}
+<p style="color: red;">{{ error_message }}</p>
+{% endif %}
+
+{% endblock contenidoCambiable%}

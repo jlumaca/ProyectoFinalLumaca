@@ -4,20 +4,31 @@
 {% block contenidoCambiable %}
 
 <form action="{% url 'VehiculoDelete' 'autos' id_vehiculo %}" method="POST">{% csrf_token %}
-
+    {% if not message %}
     <p>¿Está seguro que desea borrar el vehiculo?</p>
   
     <button type="submit" class="btn btn-danger">
         <i class="fas fa-trash-alt"></i> Eliminar
     </button>
+    {% if request.user.is_superuser or request.user.is_staff %}
+    <a href="{% url 'PublicacionesAdmin' %}" class="btn btn-secondary">
+        <i class="fas fa-times"></i> Cancelar
+    </a>
+    {% else %}
     <a href="{% url 'Vehiculos' vehiculo='autos' %}" class="btn btn-secondary">
         <i class="fas fa-times"></i> Cancelar
     </a>
+    {% endif %}
+    {% endif %}
 </form>
 
 {% if message %}
 <p>{{message}}</p>
+{% if request.user.is_superuser or request.user.is_staff %}
 <p>Para volver al menú de autos has click <a href="{% url 'Vehiculos' vehiculo='autos' %}">aquí</a></p>
+{% else %}
+<p>Para volver al menú de autos has click <a href="{% url 'Vehiculos' vehiculo='autos' %}">aquí</a></p>
+{% endif %}
 {% else %}
 <p style="color: red;">{{ error_message }}</p>
 {% endif %}

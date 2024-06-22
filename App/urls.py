@@ -29,6 +29,14 @@ urlpatterns = [
     path('vehiculo-update/<str:vehiculo>/<int:id_vehiculo>', views.vehiculoUpdate,name="VehiculoUpdate"),
     path('vehiculo-detalles/<str:vehiculo>/<int:id_vehiculo>', views.vehiculoDetail,name="VehiculoDetail"),
     path('vehiculo-search/<str:vehiculo>', views.vehiculoSearch,name="VehiculoSearch"),
+
+    path('publicaciones-admin/', views.publicaciones_admin,name="PublicacionesAdmin"),
+    path('consultas-admin/', views.consultas_admin,name="ConsultasAdmin"),
+    path('buscar-consultas/', views.buscar_consulta,name="BuscarConsulta"),
+    path('censurar-consulta/<int:id_consulta>', views.censurar_consulta,name="CensurarConsulta"),
+    path('censurar-respuesta/<int:id_respuesta>', views.censurar_respuesta,name="CensurarRespuesta"),
+    path('respuestas-admin/<str:vehiculo>', views.vehiculoSearch,name="VehiculoSearch"),
+    path('usuarios-admin/', views.usuarios_admin,name="UsuariosAdmin"),
     #path('autos-deleteForm/<id_auto>', views.autoDeleteForm,name="AutoDeleteForm"),
 
 ]

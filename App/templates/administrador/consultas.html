@@ -1,0 +1,45 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+
+<h5>Consultas</h5>
+
+<div class="consultas mt-4">
+    <form action="{% url 'BuscarConsulta' %}" method="get" class="d-flex align-items-center ms-3">{% csrf_token %}
+
+        <input type="text" id="buscar" name="buscar" class="form-control me-2" placeholder="Buscar por consulta">
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
+      </div>
+      <br>
+    {% if consultas %}
+    {% for consulta in consultas %}
+    <div class="consulta mb-3 p-3 border rounded">
+        <p><strong>{{ consulta.nombreCompleto }}:</strong> {{ consulta.mensaje }}</p>
+        <a class="btn btn-danger btn-circle fas fa-trash-alt" href="{% url 'CensurarConsulta' consulta.id %}"></a>
+        <div class="respuestas ml-4">
+            {% for respuesta in consulta.respuestas.all %}
+            <div class="respuesta bg-light p-2 my-2 rounded" style="text-align: right;">
+                <p><strong>Respuesta:</strong> {{ respuesta.mensaje }}</p>
+                <a class="btn btn-danger btn-circle fas fa-trash-alt" href="{% url 'CensurarRespuesta' respuesta.id %}"></a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+    {% else %}
+
+        {% if no_encontrado %}
+        <h3>{{no_encontrado}}</h3>
+        {% else %}
+        <h3>No hay consultas aún...</h3>
+        {% endif %}
+    {% endif %}
+</div>
+
+
+{% endblock contenidoCambiable %}

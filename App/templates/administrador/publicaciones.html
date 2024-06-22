@@ -1,0 +1,46 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+<div class="container">
+{% if vehiculos %}
+
+<br>
+<div class="d-flex justify-content-between align-items-center mb-3">
+<form action="{% url 'VehiculoSearch' 'vehiculos' %}" method="get" class="d-flex align-items-center ms-3">{% csrf_token %}
+
+  <input type="text" id="buscar" name="buscar" class="form-control me-2" placeholder="Buscar...">
+  <button type="submit" class="btn btn-primary">
+    <i class="fas fa-search"></i>
+  </button>
+</form>
+</div>
+<br>
+
+<ul class="list-unstyled">
+  {% for vehiculo in vehiculos %}
+  <li class="mb-3">
+    <div class="d-flex align-items-center">
+      {% if vehiculo.imagen %}
+        <img src="{{ vehiculo.imagen.url }}" alt="avatar" width="100px" style="margin-right: 10px;">
+      {% endif %}
+      <div class="flex-grow-1">
+        <h5 class="mb-1">{{ vehiculo.titulo }}</h5>
+        <div class="d-flex">
+          <a class="btn btn-info btn-circle fas fa-search me-2" href="{% url 'VehiculoDetail' vehiculo.tipo vehiculo.id %}"></a>       
+            <a class="btn btn-warning btn-circle fas fa-pencil-alt me-2" href="{% url 'VehiculoUpdate' vehiculo.tipo vehiculo.id %}"></a>
+            <a class="btn btn-danger btn-circle fas fa-trash-alt" href="{% url 'VehiculoDelete' vehiculo.tipo vehiculo.id %}"></a>
+        </div>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="text-center">
+  <p>No hay vehiculos disponibles.</p>
+  <a href="{% url 'VehiculoCreate' vehiculo='vehiculos' %}" class="btn btn-primary">Publicar un nuevo vehículo</a>
+</div>
+</div>
+{% endif %}
+{% endblock contenidoCambiable %}

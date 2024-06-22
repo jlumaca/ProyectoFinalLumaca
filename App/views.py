@@ -153,8 +153,14 @@ def vehiculoDetail(req,vehiculo,id_vehiculo):
 
 def vehiculoSearch(req,vehiculo):
   busqueda = req.GET.get('buscar')
-  resultados = Vehiculo.objects.filter(titulo__icontains=busqueda,tipo=vehiculo)
-  return render(req, f'{vehiculo}/{vehiculo}.html', {'vehiculos': resultados})
+
+  if req.user.is_superuser:
+     renderizar_en = "administrador/publicaciones.html"
+     resultados = Vehiculo.objects.filter(titulo__icontains=busqueda)
+  else: 
+     renderizar_en = f'{vehiculo}/{vehiculo}.html'
+     resultados = Vehiculo.objects.filter(titulo__icontains=busqueda,tipo=vehiculo)
+  return render(req, renderizar_en, {'vehiculos': resultados})
 
 
 def vista_login(req):
@@ -188,15 +194,6 @@ def vista_login(req):
     miFormulario = AuthenticationForm()
 
     return render(req, "sesiones/login.html", {"miFormulario": miFormulario})
-
-def existe_usuario(username):
-   usuario = User.objects.get(username=username)
-
-   if usuario:
-      return True
-   else:
-      return False
-
 
 def register(req):
   if req.method == 'POST':
@@ -321,7 +318,6 @@ def consultar(req,vehiculo,id_vehiculo):
         return render(req, "consultas/consultar.html", {"error_message": "Datos inválidos"})
   
   else:
-    print("LLEGA AL ELSE")
     Formulario = ConsultaForm(req.POST)
     return render(req, "consultas/consultar.html", {"miFormulario": Formulario})
   
@@ -404,3 +400,42 @@ def mi_avatar(req):
     Formulario = AvatarForm()
     return render(req, "sesiones/avatar.html", {"miFormulario": Formulario,"imagenAvatar": avatar_imagen.imagen.url if avatar_imagen.imagen else None})
 
+def publicaciones_admin(req):
+   vehiculos = Vehiculo.objects.all()
+   return render(req,"administrador/publicaciones.html",{"vehiculos":vehiculos})
+
+def consultas_admin(req):
+  consultas = Chat.objects.all()
+  return render(req,"administrador/consultas.html",{"consultas":consultas})
+
+def buscar_consulta(req):
+    busqueda = req.GET.get('buscar')
+    resultados = Chat.objects.filter(mensaje__icontains=busqueda)
+    return render(req, "administrador/consultas.html", {'consultas': resultados,"no_encontrado":"No se encontraron datos..."})
+
+
+
+
+def censurar_consulta(req,id_consulta):
+   if req.method == 'POST':
+    consulta = Chat.objects.get(id=id_consulta)
+    consulta.mensaje = "Se ha censurado este comentario"
+    consulta.save()
+    consultas = Chat.objects.all()
+    return render(req,"administrador/consultas.html",{"consultas":consultas})
+   else:
+     return render(req,"administrador/confirmacion.html",{"id_consulta":id_consulta})
+
+def censurar_respuesta(req,id_respuesta):
+   if req.method == 'POST':
+    respuesta = Respuesta.objects.get(id=id_respuesta)
+    respuesta.mensaje = "Se ha censurado esta respuesta"
+    respuesta.save()
+    consultas = Chat.objects.all()
+    return render(req,"administrador/consultas.html",{"consultas":consultas})
+   else:
+     return render(req,"administrador/confirmacion.html",{"id_consulta":id_respuesta})
+
+def usuarios_admin(req):
+   usuarios = User.objects.all()
+   return render(req,"administrador/usuarios.html",{"usuarios":usuarios})
