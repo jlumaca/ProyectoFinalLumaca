@@ -2,27 +2,29 @@
 {% load static %}
 
 {% block contenidoCambiable %}
-<br>
-<p>Soy Juan Lumaca, vivo en Uruguay 
-y soy estudiante de primer año de la 
-carrera de Ingenieria en Computación 
-de la Universidad de la República.
-En el pasado realicé otros estudios:
-Bachillerato en Informática, Tecnicatura
-en Redes y Software, Técnico de reparación PC,
-además de rendir y salvar el exámen internacional
-de inglés First Certificate in English.
-Me metí en este curso de Python de Coderhouse
-ya que quería aprender este lenguaje muy utilizado
-hoy en día alrededor del mundo, además de seguir formandome
-en el ámbito del desarrollo de software.
-Aparte del estudio, me encuentro trabajando 
-en el área de sistemas del Ministerio de Defensa Nacional
-dando soporte a los equipos informáticos y usuarios finales.</p>
-
-  
- 
-
-
-
-{% endblock contenidoCambiable%}
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Sobre Mí</h2>
+                    <p class="card-text">
+                        Soy Juan Lumaca, vivo en Uruguay y soy estudiante de primer año de la carrera de Ingeniería en Computación de la Universidad de la República.
+                        En el pasado realicé otros estudios: Bachillerato en Informática, Tecnicatura en Redes y Software, Técnico de reparación PC,
+                        además de rendir y salvar el examen internacional de inglés First Certificate in English.
+                    </p>
+                    <p class="card-text">
+                        Me metí en este curso de Python de Coderhouse ya que quería aprender este lenguaje muy utilizado hoy en día alrededor del mundo,
+                        además de seguir formándome en el ámbito del desarrollo de software.
+                    </p>
+                    <p class="card-text">
+                        Aparte del estudio, me encuentro trabajando en el área de sistemas del Ministerio de Defensa Nacional
+                        dando soporte a los equipos informáticos y usuarios finales.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenidoCambiable %}
