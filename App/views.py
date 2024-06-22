@@ -200,7 +200,18 @@ def register(req):
             #form = UserCreationForm()       
             form = UserRegisterForm()  
 
-  return render(req,"sesiones/registrarme.html" ,  {"form":form})  
+  return render(req,"sesiones/registrarme.html" ,  {"form":form})
+
+def perfil(req):  
+  return render(req,"sesiones/perfil.html" ,  {})
+
+
+def mis_publicaciones(req):
+  vehiculos = Vehiculo.objects.filter(vendedor=req.user.id)
+  return render(req,"sesiones/mis_publicaciones.html",{"vehiculos":vehiculos})
+
+
+
 
 @login_required
 def editUser(req):

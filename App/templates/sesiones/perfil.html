@@ -1,0 +1,19 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+
+<nav class="nav flex-column">
+    <a class="nav-link" href="{% url 'MisPublicaciones' %}">Mis Publicaciones</a>
+    <a class="nav-link" href="{% url 'Editar' %}">Editar Mi Perfil</a>
+</nav>
+
+<div class="container mt-5">
+
+    {% block contenidoPerfil %}
+    
+    {% endblock %}
+</div>
+
+
+{% endblock contenidoCambiable %}
