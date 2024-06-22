@@ -78,6 +78,32 @@ class UserEditForm(UserChangeForm):
         model = User
         fields = ["username", "email", "password1", "password2"]
 
+class ConsultaForm(forms.Form):
+    nombre = forms.CharField(
+        label="Nombre completo",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su nombre completo'}),
+        required=False
+    )
+    
+    telefono = forms.CharField(
+        label="Telefono",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su teléfono'}),
+        required=False
+    )
+    
+    consulta = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese su consulta'}),
+        label="Consulta",
+        required=False
+    )
+
+class ResponderForm(forms.Form):
+    respuesta = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese su consulta'}),
+        label="Respuesta",
+        required=False
+    )
+
 
 # class UserEditPassForm(UserChangeForm):
   

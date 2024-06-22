@@ -16,6 +16,9 @@ urlpatterns = [
 
     path('about/', views.about,name="About"),
 
+    path('consultar/<str:vehiculo>/<int:id_vehiculo>', views.consultar,name="Consultar"),
+    path('responder/<int:id_consulta>/<int:id_vehiculo>', views.responder,name="Responder"),
+
     path('vehiculos-lista/<str:vehiculo>', views.vehiculos,name="Vehiculos"),
     path('vehiculo-create/<str:vehiculo>', views.vehiculoCreate,name="VehiculoCreate"),
     path('vehiculo-delete/<str:vehiculo>/<int:id_vehiculo>', views.vehiculoDelete,name="VehiculoDelete"),

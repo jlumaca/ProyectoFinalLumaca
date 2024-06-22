@@ -3,8 +3,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormVi
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.contrib.auth import authenticate, login, logout
-from App.forms import UserRegisterForm,PublicarVehiculo,UserEditForm
-from .models import Vehiculo, Chat
+from App.forms import UserRegisterForm,PublicarVehiculo,UserEditForm,ConsultaForm,ResponderForm
+from .models import Vehiculo, Chat,Respuesta
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from datetime import datetime
@@ -126,7 +126,12 @@ def vehiculoUpdate(req,vehiculo,id_vehiculo):
 
 def vehiculoDetail(req,vehiculo,id_vehiculo):
   vehiculoDet = Vehiculo.objects.get(id=id_vehiculo)
+
+  consultas = Chat.objects.filter(consulta=vehiculoDet)
+
   contexto = {
+     "id_vendedor":vehiculoDet.vendedor.id,
+     "id_vehiculo":vehiculoDet.id,
      "titulo":vehiculoDet.titulo,
      "marca":vehiculoDet.marca,
      "modelo":vehiculoDet.modelo,
@@ -135,7 +140,8 @@ def vehiculoDetail(req,vehiculo,id_vehiculo):
      "descripcion":vehiculoDet.descripcion,
      "telefono":vehiculoDet.telefonoVendedor,
      "email":vehiculoDet.emailVendedor,
-     "imagenVehiculo":vehiculoDet.imagen.url if vehiculoDet.imagen else None
+     "imagenVehiculo":vehiculoDet.imagen.url if vehiculoDet.imagen else None,
+     'consultas': consultas,
   }
   return render(req, f"{vehiculo}/{vehiculo}_details.html", contexto)
 
@@ -234,7 +240,72 @@ def editUser(req):
 
     return render(req, "sesiones/editar_usuario.html", {"miFormulario": miFormulario})
 
+def consultar(req,vehiculo,id_vehiculo):
+  if req.method == 'POST':
 
-# def editUserPass(req):
-#    return render(req, "sesiones/editar_pass.html", {"miFormulario": miFormulario})
+      Formulario = ConsultaForm(req.POST)
+
+      if Formulario.is_valid():
+
+        informacion = Formulario.cleaned_data
+        fecha_actual = datetime.now().strftime('%Y-%m-%d')
+        #imagen_auto = Vehiculo(imagen=informacion["imagen"])
+        vehiculo_cons = Vehiculo.objects.get(id=id_vehiculo)
+        print(f"ID de la consulta de vehiculo es: {vehiculo_cons.id}")
+        nueva_consulta = Chat(nombreCompleto = informacion["nombre"],
+                              telefono = informacion["telefono"],
+                              mensaje = informacion["consulta"],
+                              consulta = vehiculo_cons,
+                              fecha = fecha_actual
+                              )
+        nueva_consulta.save()
+
+        #return render(req, f"{vehiculo}/{vehiculo}_details.html", {})
+        return vehiculoDetail(req,vehiculo,id_vehiculo)
+      else:
+
+        return render(req, "consultas/consultar.html", {"error_message": "Datos inválidos"})
+  
+  else:
+    print("LLEGA AL ELSE")
+    Formulario = ConsultaForm(req.POST)
+    return render(req, "consultas/consultar.html", {"miFormulario": Formulario})
+  
+
+def responder(req,id_consulta,id_vehiculo):
+  
+  vehiculo_cons = Vehiculo.objects.get(id=id_vehiculo)
+  consulta_id = Chat.objects.get(id=id_consulta)
+  if req.method == 'POST':
+
+      Formulario = ResponderForm(req.POST)
+      
+
+      if Formulario.is_valid():
+
+        informacion = Formulario.cleaned_data
+        fecha_actual = datetime.now().strftime('%Y-%m-%d')
+        #imagen_auto = Vehiculo(imagen=informacion["imagen"])
+        
+        nueva_respuesta = Respuesta(
+                              mensaje = informacion["respuesta"],
+                              consulta = consulta_id,
+                              fecha = fecha_actual
+                              )
+        nueva_respuesta.save()
+
+        #return render(req, f"{vehiculo}/{vehiculo}_details.html", {})
+        return vehiculoDetail(req,vehiculo_cons.tipo,id_vehiculo)
+      else:
+
+        return render(req, "consultas/responder.html", {"error_message": "Datos inválidos"})
+  
+  else:
+    
+    titulo = vehiculo_cons.titulo
+    consulta_mensaje = consulta_id.mensaje
+    Formulario = ResponderForm(req.POST)
+    return render(req, "consultas/responder.html", {"miFormulario": Formulario,"titulo":titulo,"consulta":consulta_mensaje})
+
+
 

@@ -1,0 +1,29 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoCambiable %}
+
+<form action="" method="post">{% csrf_token %}
+
+    {{ miFormulario.as_p }}
+        <button type="submit" class="btn btn-primary mt-3">
+            <i class="fas fa-plus"></i> Consultar
+        </button>
+        <a href="{% url 'Vehiculos' vehiculo='autos' %}" class="btn btn-secondary mt-3">
+            <i class="fas fa-times"></i> Cancelar
+        </a>
+  
+</form>
+
+{% if error_message %}
+<p style="color: red;">{{ error_message }}</p>
+{% elif message %}
+<p>{{message}}</p>
+{% endif %}
+
+  
+ 
+
+
+
+{% endblock contenidoCambiable%}

@@ -27,4 +27,41 @@
         </div>
     </div>
 </div>
+
+<h5>Consultas</h5>
+{% if user.id != id_vendedor %}
+<form action="{% url 'Consultar' 'autos' id_vehiculo %}" method="">{% csrf_token %}
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Consultar
+    </button>
+</form>
+{% endif %}
+
+<div class="consultas mt-4">
+    {% if consultas %}
+    {% for consulta in consultas %}
+    <div class="consulta mb-3 p-3 border rounded">
+        <p><strong>{{ consulta.nombreCompleto }}:</strong> {{ consulta.mensaje }}</p>
+        <div class="respuestas ml-4">
+            {% for respuesta in consulta.respuestas.all %}
+            <div class="respuesta bg-light p-2 my-2 rounded" style="text-align: right;">
+                <p><strong>Respuesta:</strong> {{ respuesta.mensaje }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% if user.id == id_vendedor %}
+        <a href="{% url 'Responder' consulta.id id_vehiculo %}" class="btn btn-link">Responder</a>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    {% else %}
+
+        <h3>No hay consultas aún...</h3>
+
+    {% endif %}
+</div>
+
 {% endblock contenidoCambiable %}
+
+
