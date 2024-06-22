@@ -71,7 +71,7 @@ def vehiculoDelete(req,vehiculo,id_vehiculo):
 
       vehiculoDel = Vehiculo.objects.get(id=id_vehiculo)
       vehiculoDel.delete()
-      return render(req, f"{vehiculo}/{vehiculo}_delete.html", {"message":"Auto borrado con éxito","id_vehiculo":0})
+      return render(req, f"{vehiculo}/{vehiculo}_delete.html", {"message":"Vehiculo borrado con éxito","id_vehiculo":0})
       #return HttpResponse(f"<p>{id_auto}</p>")
     else:
        #print(f"Id auto es: {id_auto}")
