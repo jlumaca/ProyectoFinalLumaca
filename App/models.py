@@ -35,13 +35,16 @@ class Vehiculo(models.Model):
         return self.titulo
 
 class Chat(models.Model):
-    comentario = models.ForeignKey(Vehiculo, related_name='comentarios', on_delete=models.CASCADE, null=True)
-    nombre = models.CharField(max_length=40)
-    mensaje = models.TextField(null=True, blank=True)
-    fechaComentario = models.DateTimeField(auto_now_add=True)
+	nombreCompleto = models.CharField(max_length=40)
+	telefono = models.CharField(max_length=20,default=None)
+	consulta = models.ForeignKey(Vehiculo, related_name='consulta', on_delete=models.CASCADE, null=True)
+	fecha = models.DateTimeField(auto_now_add=True)
+	mensaje = models.TextField(null=True, blank=True)
+     
+	class Meta:
+            ordering = ['fecha']
 
-    class Meta:
-        ordering = ['-fechaComentario']
-
-    def __str__(self):
-        return '%s - %s' % (self.nombre, self.comentario)
+class Respuesta(models.Model):
+    consulta = models.ForeignKey(Chat, related_name='respuestas', on_delete=models.CASCADE)
+    mensaje = models.TextField()
+    fecha = models.DateTimeField(auto_now_add=True)
