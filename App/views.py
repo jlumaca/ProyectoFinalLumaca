@@ -189,23 +189,61 @@ def vista_login(req):
 
     return render(req, "sesiones/login.html", {"miFormulario": miFormulario})
 
+def existe_usuario(username):
+   usuario = User.objects.get(username=username)
+
+   if usuario:
+      return True
+   else:
+      return False
+
 
 def register(req):
   if req.method == 'POST':
-
-            #form = UserCreationForm(request.POST)
-            form = UserRegisterForm(req.POST)
-            if form.is_valid():
-
+            form = UserRegisterForm(req.POST,req.FILES)
+            if form.is_valid():  
                   username = form.cleaned_data['username']
+                  imagenForm = form.cleaned_data
                   form.save()
-                  return render(req,"sesiones/login.html" ,  {"message":"Usuario Creado :)"})
+                  usuario = User.objects.get(username=username)
+                    # avatar = AvatarUsuario.objects.get(usuario=usuario)
 
+                  if 'imagen' in req.FILES:
+                    print("LLEGA A LA IMAGEN")
+                    imgAvatar = imagenForm["imagen"]
+                  else:
+                    imgAvatar = False
+                    
+                  avatar = AvatarUsuario(
+                                        imagen = imgAvatar,
+                                        usuario = usuario
+                                        )
+                  avatar.save()
+
+                  FormLogin = AuthenticationForm()
+                  return render(req,"sesiones/login.html" ,  {"miFormulario":FormLogin,"user_message":"Usuario creado con exito, ahora puedes iniciar sesión"})    
+            else:
+              error_message = None
+              if 'username' in form.errors and 'already exists' in str(form.errors['username']):
+                  error_message = "El usuario ya existe, intente con otro."
+              elif 'password2' in form.errors:
+                  for error in form.errors['password2']:
+                      if 'too short' in error:
+                          error_message = "La contraseña es muy corta, debe tener al menos 8 caracteres."
+                          break
+                      if 'password mismatch' in error:
+                          error_message = "Las contraseñas no coinciden."
+                          break
+              if not error_message:
+                  error_message = "Revise los datos que han ingresado, los mismos son incorrectos."
+              
+              return render(req, "sesiones/registrarme.html", {"form": form, "error_message": error_message})
   else:
-            #form = UserCreationForm()       
+            #form = UserCreationForm()  
+               
             form = UserRegisterForm()  
 
-  return render(req,"sesiones/registrarme.html" ,  {"form":form})
+            return render(req,"sesiones/registrarme.html" ,  {"form":form})
 
 def perfil(req):  
   return render(req,"sesiones/perfil.html" ,  {})
@@ -231,24 +269,24 @@ def editUser(req):
 
       data = miFormulario.cleaned_data
 
-      usuario.username = data["username"]
-      usuario.email = data["email"]
-      #usuario.last_name = data["last_name"]
-      usuario.set_password(data["password1"])
-
-      pss1 = data["password1"]
-      pss2 = data["password2"]
-
-      if pss1 == pss2:
+      if len(data["password1"]) < 8:
+          return render(req, "sesiones/editar_usuario.html", {"miFormulario": miFormulario,"error_message": "La contraseña es muy corta, debe tener al menos 8 caracteres."})
+      elif data["password1"] != data["password2"]:
+         return render(req, "sesiones/editar_usuario.html", {"miFormulario": miFormulario,"error_message": "Las contraseñas no coinciden."})
+      else:
+        usuario.username = data["username"]
+        usuario.email = data["email"]
+        #usuario.last_name = data["last_name"]
+        usuario.set_password(data["password1"])
         usuario.save()
         return render(req, "sesiones/editar_usuario.html", {"message": "Datos actualizado con éxito"})
-      else:
-         miFormulario = UserEditForm(instance=req.user)
-         return render(req, "sesiones/editar_usuario.html", {"miFormulario": miFormulario,"error_message": "Las contraseñas deben coincidir"})
-    
     else:
 
-      return render(req, "sesiones/editar_usuario.html", {"miFormulario": miFormulario})
+      
+      if 'username' in miFormulario.errors and 'already exists' in str(miFormulario.errors['username']):      
+        return render(req, "sesiones/editar_usuario.html", {"miFormulario": miFormulario, "error_message": "El usuario ya existe, intente con otro."})
+      else:
+        return render(req, "sesiones/editar_usuario.html", {"miFormulario": miFormulario, "error_message": "Revise los datos que han ingresado, los mismos son incorrectos."})
   
   else:
 
@@ -287,7 +325,7 @@ def consultar(req,vehiculo,id_vehiculo):
     Formulario = ConsultaForm(req.POST)
     return render(req, "consultas/consultar.html", {"miFormulario": Formulario})
   
-
+@login_required
 def responder(req,id_consulta,id_vehiculo):
   
   vehiculo_cons = Vehiculo.objects.get(id=id_vehiculo)
@@ -323,9 +361,11 @@ def responder(req,id_consulta,id_vehiculo):
     Formulario = ResponderForm(req.POST)
     return render(req, "consultas/responder.html", {"miFormulario": Formulario,"titulo":titulo,"consulta":consulta_mensaje})
 
+@login_required
 def mi_avatar(req):
   
   usuario = User.objects.get(id=req.user.id)
+  avatar_imagen = AvatarUsuario.objects.get(usuario=usuario)
   if req.method == 'POST':
 
       Formulario = AvatarForm(req.POST,req.FILES)
@@ -333,21 +373,34 @@ def mi_avatar(req):
 
       if Formulario.is_valid():
 
-        informacion = Formulario.cleaned_data
-        avatar = AvatarUsuario(
-                              imagen = informacion["imagen"],
-                              usuario = usuario
-                              )
-        
-      
-        avatar.save()
+        accion = req.POST["action"]
+        #print(f"Accion es: {accion}")
 
-        return render(req, "sesiones/perfil.html", {})
+        informacion = Formulario.cleaned_data
+
+        if accion == "guardar":
+          if 'imagen' in req.FILES:
+                  avatar_imagen.imagen = informacion["imagen"]
+                  avatar_imagen.usuario = usuario
+                  avatar_imagen.save()
+                  return render(req, "sesiones/avatar.html", {"miFormulario": Formulario,
+                                                              "message":"Avatar cargado con éxito",
+                                                              "imagenAvatar": avatar_imagen.imagen.url if avatar_imagen.imagen else None})
+          else:
+            Formulario = AvatarForm()
+            return render(req, "sesiones/avatar.html", {"miFormulario": Formulario,
+                                                        "error_message":"No has cargado ningún avatar",
+                                                        "imagenAvatar": avatar_imagen.imagen.url if avatar_imagen.imagen else None})
+        else:
+            #SE REALIZA BAJA LOGICA DEL AVATAR
+            avatar_imagen.imagen = False
+            avatar_imagen.usuario = usuario
+            avatar_imagen.save()
+            return render(req, "sesiones/avatar.html", {"miFormulario": Formulario,"message":"Avatar eliminado con éxito"})
       else:
         return render(req, "consultas/responder.html", {"error_message": "Datos inválidos"})
   
   else:
-    avatar_imagen = AvatarUsuario.objects.get(usuario=usuario,imagen__isnull=False)
-    Formulario = AvatarForm(initial={"imagen": avatar_imagen.imagen})
+    Formulario = AvatarForm()
     return render(req, "sesiones/avatar.html", {"miFormulario": Formulario,"imagenAvatar": avatar_imagen.imagen.url if avatar_imagen.imagen else None})
 

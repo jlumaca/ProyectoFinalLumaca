@@ -6,18 +6,26 @@
 <div class="container">
     <div class="row justify-content-center mt-5">
         <div class="col-md-6">
-            <form action="{% url 'Registro' %}" method="post" class="border p-4 bg-light">
+            <form action="{% url 'Registro' %}" enctype="multipart/form-data" method="POST" class="border p-4 bg-light">
                 {% csrf_token %}
                 
                 {% for field in form %}
                     <div class="mb-3">
-                        {{ field.label_tag }}
-                        {{ field }}
+                        {{ field.label_tag }} <!-- Etiqueta del campo -->
+                        {{ field }} <!-- Campo del formulario -->
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
                     </div>
                 {% endfor %}
                 
                 <button type="submit" class="btn btn-primary">Crear cuenta</button>
             </form>
+            {% if error_message %}
+                <p style="color: red;">{{ error_message }}</p>
+            {% elif message %}
+                <p>{{ message }}</p>
+            {% endif %}
         </div>
     </div>
 </div>

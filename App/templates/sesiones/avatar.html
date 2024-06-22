@@ -12,19 +12,28 @@
             <div class="card-body">
                 {% if imagenAvatar %}
                 <img src="{{ imagenAvatar }}" class="img-fluid" alt="Avatar">
-                {% endif %}
+                {% endif %}         
                 <form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                     {% csrf_token %}
                     
                     {{ miFormulario.as_p }}
                     
-                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                </form>
+                    <div class="d-flex">
+                        <button type="submit" name="action" value="guardar" class="btn btn-primary mr-2">Guardar cambios</button>
+                        <button type="submit" name="action" value="eliminar" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                    </div>
+                </form>    
+                {% if error_message %}
+                <p style="color: red;">{{ error_message }}</p>
+                {% elif message %}
+                <p>{{message}}</p>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 
-
-
 {% endblock contenidoPerfil %}
+

@@ -3,17 +3,38 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm,UserChangeForm
 
 
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
 class UserRegisterForm(UserCreationForm):
-    username = forms.CharField(label="Usuario")
-    email = forms.EmailField(label="Correo electrónico")
-    
-    password1 = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
-    password2 = forms.CharField(label="Confirme contraseña", widget=forms.PasswordInput)
+    username = forms.CharField(
+        label="Usuario",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de usuario'})
+    )
+    email = forms.EmailField(
+        label="Correo electrónico",
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Correo electrónico'})
+    )
+    password1 = forms.CharField(
+        label="Contraseña",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'})
+    )
+    password2 = forms.CharField(
+        label="Confirme contraseña",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirme contraseña'})
+    )
+    imagen = forms.ImageField(
+        label="Avatar",
+        required=False,
+        widget=forms.FileInput(attrs={'class': 'form-control-file'})
+    )
 
     class Meta:
         model = User
-        fields = ["username","email","password1","password2"]
-        help_texts = {k:"" for k in fields}
+        fields = ["username", "email", "password1", "password2", "imagen"]
+        help_texts = {k: "" for k in fields}
+
 
 class PublicarVehiculo(forms.Form):
     titulo = forms.CharField(
