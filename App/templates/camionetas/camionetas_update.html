@@ -7,14 +7,30 @@
 <form action="{% url 'VehiculoUpdate' 'camionetas' id_vehiculo %}" enctype="multipart/form-data" method="post">{% csrf_token %}
 
     {{form.as_p}}
+    {% if not message %}
+    <button type="submit" class="btn btn-primary mt-3">
+      <i class="fas fa-sync-alt"></i> Actualizar
+    </button>
+    {% if request.user.is_superuser or request.user.is_staff %}
+    <a href="{% url 'PublicacionesAdmin' %}" class="btn btn-secondary mt-3">
+      <i class="fas fa-times"></i> Cancelar
+    </a>
+    {% else %}
+    <a href="{% url 'Vehiculos' vehiculo='camionetas' %}" class="btn btn-secondary mt-3">
+      <i class="fas fa-times"></i> Cancelar
+    </a>
+    {% endif %}
+    {% endif %}
   
-    <button type="submit"> Actualizar </button>
-  
-</form>
+  </form>
 
   {% if message %}
   <p>{{message}}</p>
+  {% if request.user.is_superuser or request.user.is_staff %}
+  <p>Para volver al menú de camionetas has click <a href="{% url 'PublicacionesAdmin' %}">aquí</a></p>
+  {% else %}
   <p>Para volver al menú de camionetas has click <a href="{% url 'Vehiculos' vehiculo='camionetas' %}">aquí</a></p>
+  {% endif %}
   {% else %}
   <p style="color: red;">{{ error_message }}</p>
   {% endif %}
