@@ -37,6 +37,8 @@ urlpatterns = [
     path('censurar-respuesta/<int:id_respuesta>', views.censurar_respuesta,name="CensurarRespuesta"),
     path('respuestas-admin/<str:vehiculo>', views.vehiculoSearch,name="VehiculoSearch"),
     path('usuarios-admin/', views.usuarios_admin,name="UsuariosAdmin"),
+    path('usuario-delete/<int:id_usuario>', views.usuario_delete,name="UsuarioDelete"),
+    path('usuario-update/<int:id_usuario>', views.usuario_update,name="UsuarioUpdate"),
     #path('autos-deleteForm/<id_auto>', views.autoDeleteForm,name="AutoDeleteForm"),
 
 ]

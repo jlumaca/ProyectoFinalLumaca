@@ -35,6 +35,20 @@ class UserRegisterForm(UserCreationForm):
         fields = ["username", "email", "password1", "password2", "imagen"]
         help_texts = {k: "" for k in fields}
 
+class UsuarioUpdate(forms.Form):
+    username = forms.CharField(
+        label="Usuario",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de usuario'})
+    )
+    email = forms.EmailField(
+        label="Correo electrónico",
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Correo electrónico'})
+    )
+
+    class Meta:
+        model = User
+        fields = ["username", "email"]
+        help_texts = {k: "" for k in fields}
 
 class PublicarVehiculo(forms.Form):
     titulo = forms.CharField(

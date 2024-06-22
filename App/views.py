@@ -4,13 +4,14 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.contrib.auth import authenticate, login, logout
-from App.forms import UserRegisterForm,PublicarVehiculo,UserEditForm,ConsultaForm,ResponderForm,AvatarForm
+from App.forms import UserRegisterForm,PublicarVehiculo,UserEditForm,ConsultaForm,ResponderForm,AvatarForm,UsuarioUpdate
 from .models import Vehiculo, Chat,Respuesta,AvatarUsuario
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.cache import never_cache
 from django.http import HttpResponse
 # Create your views here.
 
@@ -436,6 +437,45 @@ def censurar_respuesta(req,id_respuesta):
    else:
      return render(req,"administrador/confirmacion.html",{"id_consulta":id_respuesta})
 
+@never_cache
 def usuarios_admin(req):
-   usuarios = User.objects.all()
+   usuarios = User.objects.filter(is_active=True).order_by('username')
    return render(req,"administrador/usuarios.html",{"usuarios":usuarios})
+
+def usuario_delete(req,id_usuario):
+    if req.method == 'POST':
+      usuario = User.objects.get(id=id_usuario)
+      publicaciones = Vehiculo.objects.filter(vendedor=usuario)
+      if publicaciones:
+        publicaciones.delete()
+        
+      usuario.delete()
+      usuarios = User.objects.all()
+
+
+      return render(req,"administrador/confirmacion_usuario.html",{"usuarios":usuarios,"message":"Usuario eliminado con exito"})
+    else:
+      return render(req,"administrador/confirmacion_usuario.html",{"id_usuario":id_usuario})
+
+def usuario_update(req,id_usuario):
+   if req.method == 'POST':
+      Formulario = UsuarioUpdate(req.POST)
+      if Formulario.is_valid():
+        data = Formulario.cleaned_data
+        usuario = User.objects.get(id=id_usuario)
+        usuario.username = data["username"]
+        usuario.email = data["email"]
+        usuario.save()
+        return render(req, "administrador/usuario_update.html", {"form": Formulario, "id_usuario": id_usuario,"message":"Usuario actualizado con exito"})
+      else:
+         return render(req, "administrador/usuario_update.html", {"form": Formulario, "id_usuario": id_usuario,"error_message":"Los datos son invalidos"})
+   
+   else:
+      usuario = User.objects.get(id=id_usuario)
+
+      Formulario = UsuarioUpdate(initial={
+          "username": usuario.username,
+          "email": usuario.email,
+        })
+
+      return render(req, "administrador/usuario_update.html", {"form": Formulario, "id_usuario": id_usuario})
