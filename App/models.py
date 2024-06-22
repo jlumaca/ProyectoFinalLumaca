@@ -18,7 +18,6 @@ class Vehiculo(models.Model):
     titulo = models.CharField(max_length=200)
     tipo = models.CharField(max_length=15, choices=vehiculoSeleccion, default='autos')
     marca = models.CharField(max_length=40)
-    
     modelo = models.CharField(max_length=40)
     anioFabricacion = models.IntegerField() 
     precio = models.DecimalField(max_digits=10, decimal_places=2)
@@ -27,6 +26,7 @@ class Vehiculo(models.Model):
     telefonoVendedor = models.CharField(max_length=20)
     emailVendedor = models.EmailField()
     imagen = models.ImageField(null=True, blank=True, upload_to="media/")
+    kilometros = models.IntegerField(null=True, blank=True) 
     #ACTUALIZAR NUEVA RUTA STATIC/IMAGENES/ (ANTES IMAGENES/), PUEDE GENERAR ERROR
     class Meta:
         ordering = ['vendedor', '-fechaPublicacion']
@@ -48,3 +48,7 @@ class Respuesta(models.Model):
     consulta = models.ForeignKey(Chat, related_name='respuestas', on_delete=models.CASCADE)
     mensaje = models.TextField()
     fecha = models.DateTimeField(auto_now_add=True)
+
+class AvatarUsuario(models.Model):
+     imagen = models.ImageField(null=True, blank=True, upload_to="avatars/")
+     usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)

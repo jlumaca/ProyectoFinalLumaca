@@ -1,10 +1,11 @@
 from django.views.generic import TemplateView, ListView, DetailView, UpdateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView 
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.contrib.auth import authenticate, login, logout
-from App.forms import UserRegisterForm,PublicarVehiculo,UserEditForm,ConsultaForm,ResponderForm
-from .models import Vehiculo, Chat,Respuesta
+from App.forms import UserRegisterForm,PublicarVehiculo,UserEditForm,ConsultaForm,ResponderForm,AvatarForm
+from .models import Vehiculo, Chat,Respuesta,AvatarUsuario
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from datetime import datetime
@@ -40,6 +41,7 @@ def vehiculoCreate(req,vehiculo):
                             marca = informacion['marca'],
                             modelo = informacion['modelo'],
                             anioFabricacion = informacion['yearFabricacion'],
+                            kilometros = informacion['kilometros'],
                             precio = informacion['precio'],
                             descripcion = informacion['descripcion'],
                             fechaPublicacion = fecha_actual,
@@ -90,6 +92,7 @@ def vehiculoUpdate(req,vehiculo,id_vehiculo):
           vehiculoUpd.marca = data["marca"]
           vehiculoUpd.modelo = data["modelo"]
           vehiculoUpd.anioFabricacion = data["yearFabricacion"]
+          vehiculoUpd.kilometros = data["kilometros"]
           vehiculoUpd.precio = data["precio"]
           vehiculoUpd.descripcion = data["descripcion"]
           vehiculoUpd.telefonoVendedor = data["telefono"]
@@ -115,6 +118,7 @@ def vehiculoUpdate(req,vehiculo,id_vehiculo):
           "marca": vehiculoUpd.marca,
           "modelo": vehiculoUpd.modelo,
           "yearFabricacion": vehiculoUpd.anioFabricacion,
+          "kilometros": vehiculoUpd.kilometros,
           "precio": vehiculoUpd.precio,
           "descripcion": vehiculoUpd.descripcion,
           "telefono": vehiculoUpd.telefonoVendedor,
@@ -136,6 +140,7 @@ def vehiculoDetail(req,vehiculo,id_vehiculo):
      "marca":vehiculoDet.marca,
      "modelo":vehiculoDet.modelo,
      "año":vehiculoDet.anioFabricacion,
+     "kilometros":vehiculoDet.kilometros,
      "precio":vehiculoDet.precio,
      "descripcion":vehiculoDet.descripcion,
      "telefono":vehiculoDet.telefonoVendedor,
@@ -318,5 +323,31 @@ def responder(req,id_consulta,id_vehiculo):
     Formulario = ResponderForm(req.POST)
     return render(req, "consultas/responder.html", {"miFormulario": Formulario,"titulo":titulo,"consulta":consulta_mensaje})
 
+def mi_avatar(req):
+  
+  usuario = User.objects.get(id=req.user.id)
+  if req.method == 'POST':
 
+      Formulario = AvatarForm(req.POST,req.FILES)
+      
+
+      if Formulario.is_valid():
+
+        informacion = Formulario.cleaned_data
+        avatar = AvatarUsuario(
+                              imagen = informacion["imagen"],
+                              usuario = usuario
+                              )
+        
+      
+        avatar.save()
+
+        return render(req, "sesiones/perfil.html", {})
+      else:
+        return render(req, "consultas/responder.html", {"error_message": "Datos inválidos"})
+  
+  else:
+    avatar_imagen = AvatarUsuario.objects.get(usuario=usuario,imagen__isnull=False)
+    Formulario = AvatarForm(initial={"imagen": avatar_imagen.imagen})
+    return render(req, "sesiones/avatar.html", {"miFormulario": Formulario,"imagenAvatar": avatar_imagen.imagen.url if avatar_imagen.imagen else None})
 

@@ -26,6 +26,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div>
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            {% if request.user.is_superuser or request.user.is_staff %}
+                            <li class="nav-item"><a class="nav-link" href="">Inicio</a></li>
+                            <li class="nav-item"><a class="nav-link" href="">Publicaciones</a></li>
+                            <li class="nav-item"><a class="nav-link" href="">Consultas</a></li>
+                            <li class="nav-item"><a class="nav-link" href="">Respuestas</a></li>
+                            <li class="nav-item"><a class="nav-link" href="">Usuarios</a></li>
+                            {% else %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'Inicio' %}">Inicio</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='autos' %}">Autos</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='motos' %}">Motos</a></li>
@@ -37,13 +44,16 @@
                             <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='acuaticos' %}">Acuaticos</a></li>
                             <li class="nav-item"><a class="nav-link" href="#">Otros</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'About' %}">Conoceme</a></li>
+                            {% endif %}
                             {% if request.user.is_authenticated %}
                                 <li class="nav-item">
                                     <p class="text-white m-0">Usuario: <strong>{{ request.user.username }}</strong></p>
                                 </li>
+                                {% if not request.user.is_superuser or not request.user.is_staff %}
                                 <li class="nav-item">
                                     <a class="btn btn-outline-light ms-2" href="{% url 'Perfil' %}">Perfil</a>
                                 </li>
+                                {% endif %}
                                 <li class="nav-item">
                                     <form method="post" action="{% url 'Logout' %}" class="d-inline">
                                         {% csrf_token %}

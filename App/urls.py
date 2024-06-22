@@ -14,6 +14,7 @@ urlpatterns = [
     path('editar-user/', views.editUser,name="Editar"),
     path('perfil/', views.perfil,name="Perfil"),
     path('mis-publicaciones/', views.mis_publicaciones,name="MisPublicaciones"),
+    path('mi-avatar/', views.mi_avatar,name="MiAvatar"),
 
     #path('editar-userpass/', views.editUserPass,name="EditarPass"),
 

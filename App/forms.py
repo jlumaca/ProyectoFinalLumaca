@@ -35,6 +35,11 @@ class PublicarVehiculo(forms.Form):
         label="Año de fabricación",
         widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el año de fabricación'})
     )
+
+    kilometros = forms.IntegerField(
+        label="Kilometros",
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese los kilometros'})
+    )
     
     precio = forms.IntegerField(
         label="Precio (en US$)",
@@ -104,6 +109,12 @@ class ResponderForm(forms.Form):
         required=False
     )
 
+class AvatarForm(forms.Form):
+    imagen = forms.ImageField(
+        label="Imagen",
+        required=False,
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control'})
+    )
 
 # class UserEditPassForm(UserChangeForm):
   
