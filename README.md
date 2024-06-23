@@ -10,7 +10,7 @@
 <h1>BuyCarsUy - Proyecto Final Coderhouse</h1>
 
 <h2>Descripción del Proyecto</h2>
-<p>BuyCarsUy es una aplicación diseñada para facilitar la publicación y venta de vehículos. Los usuarios pueden postear vehículos, editar o borrar sus publicaciones, y responder a consultas sobre sus vehículos. Los administradores tienen capacidades adicionales para gestionar los contenidos y usuarios de la plataforma.</p>
+<p>BuyCarsUy es una aplicación diseñada para facilitar la publicación y venta de vehículos. Los usuarios pueden postear vehículos, como tambien editarlos o borrarlos. Tambien responder a consultas sobre sus publicaciones (vehiculos). Los administradores tienen capacidades adicionales para gestionar los contenidos y usuarios de la plataforma.</p>
 
 <h2>Acciones</h2>
 
