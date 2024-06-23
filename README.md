@@ -12,7 +12,7 @@
 <h2>Descripción del Proyecto</h2>
 <p>BuyCarsUy es una aplicación diseñada para facilitar la publicación y venta de vehículos. Los usuarios pueden postear vehículos, como tambien editarlos o borrarlos. Tambien responder a consultas sobre sus publicaciones (vehiculos). Los administradores tienen capacidades adicionales para gestionar los contenidos y usuarios de la plataforma.</p>
 
-<h6>Creador</h6>
+<h2>Creador</h2>
 <p>Juan Manuel Lumaca</p>
 <h2>Acciones</h2>
 
