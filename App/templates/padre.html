@@ -20,7 +20,9 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <div style="padding-right: 10px; margin-left: -90px;">
-                    <a class="navbar-brand" href="{% url 'Inicio' %}">BuyCars Uy</a>
+                    <div>
+                    <a styles="margin-left=10px" class="navbar-brand" href="{% url 'Inicio' %}">BuyCars Uy</a>
+                    </div>
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -40,7 +42,7 @@
                             <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='trailers' %}">Trailers</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='agricolas' %}">Agricolas</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'Vehiculos' vehiculo='acuaticos' %}">Acuaticos</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Otros</a></li>
+                            
                             <li class="nav-item"><a class="nav-link" href="{% url 'About' %}">Conoceme</a></li>
                             {% endif %}
                             {% if request.user.is_authenticated %}
